@@ -1,0 +1,28 @@
+{
+    "files.exclude": {
+        // ⚙️ config
+        "Taskfile.yaml": true,
+        ".cocorc": true,
+        ".task": true,
+        ".cargo": true,
+        // "Cargo.toml": true,
+
+        // 📦
+        "Cargo.lock": true,
+        "target": true,
+
+        // 📝 readmes
+        "**/**/README.md": true,
+        "LICENSE": true,
+
+        // 🗑️
+        "check_size.py": true,
+        "*.code-workspace": true,
+        ".gitignore": true,
+        ".vscode": true,
+        ".git": true,
+    },
+    "[rust]": {
+        "editor.formatOnSave": true
+    }
+}

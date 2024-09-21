@@ -1,0 +1,53 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "terminal.integrated.env.windows": {
+            // allows to run the command in the terminal for development purposes
+            "PATH": "${workspaceFolder}/target/debug;${env:PATH}",
+        },
+        "lucodear-icons.activeIconPack": "rust_ferris_minimal",
+        "lucodear-icons.folders.associations": {
+            ".cargo": "rust",
+        },
+        "lucodear-icons.folders.customClones": [
+            {
+                "base": "components",
+                "color": "red-500",
+                "folderNames": ["widgets"],
+                "name": "folder-widgets"
+            }
+        ],
+        "lucodear-icons.files.associations": {
+        
+        },
+        "files.exclude": {
+            "**/.git": false,
+            "**/.svn": false,
+            "**/.hg": false,
+            "**/CVS": false,
+            "**/.DS_Store": false,
+            "**/Thumbs.db": true,
+            "**/.classpath": false,
+            "**/.factorypath": true,
+            "**/.project": false,
+            "**/.settings": true,
+            "*.ids": false,
+            "*.iml": false,
+            "*.ipr": false,
+            "*.iws": false,
+            "*.orig": false,
+            ".gradle": false,
+            ".idea/": false,
+            ".out/": false,
+            ".settings": false,
+            ".vscode": false,
+            "bin/": false,
+            "build/": false,
+            "out/": false
+        }
+    }
+}

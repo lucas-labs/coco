@@ -1,0 +1,23 @@
+[package]
+name = "cc-core"
+description = "🥥 » coco's core"
+publish = false
+version.workspace = true
+readme.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+lool = { workspace = true, features = ["cli.stylize", "macros"] }
+eyre = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+tokio = { workspace = true }
+serde_yaml = "0.9.33"
+dirs = "5.0.1"
+unicode-width = "0.2.0"
+
+[dev-dependencies]
+tempfile = "3.12"

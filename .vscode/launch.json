@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // debug rust on windows
+        {
+            "name": "debug: coco",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/debug/coco.exe",
+            "args": [],
+            "console": "integratedTerminal",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "preLaunchTask": "cargo: build",
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "LLDB: coco",
+            "program": "${workspaceFolder}/target/debug/coco.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "sourceLanguages": ["rust"],
+            "preLaunchTask": "cargo: build",
+        }
+    ]
+}

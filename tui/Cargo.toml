@@ -1,0 +1,20 @@
+[package]
+name = "tui"
+description = "🥥 » tui utilities for coco"
+publish = false
+version.workspace = true
+readme.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+lool = { workspace = true, features = ["macros", "cli.tui", "cli.tui.widgets"] }
+eyre = { workspace = true }
+tokio = { workspace = true }
+cc-core = { path = "../core" }
+unicode-width = "0.2.0"
+
+

@@ -1,0 +1,22 @@
+[package]
+name = "coco"
+description.workspace = true
+version.workspace = true
+readme.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+eyre = { workspace = true }
+lool = { workspace = true }
+tokio = { workspace = true }
+indoc = { workspace = true }
+strum = { workspace = true, features = ["derive"] }
+serde = { workspace = true, features = ["derive"] }
+tui = { path = "../tui" }
+cc-core = { path = "../core" }
+pico-args = "0.5.0"
+
+[[bin]]
+name = "coco"
+path = "src/main.rs"

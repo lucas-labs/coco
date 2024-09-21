@@ -1,0 +1,16 @@
+# ┌──────┐
+# │ Rust │
+# └──────┘
+
+# Cargo.lock # uncomment for libraries, keep it commented for binaries
+/target
+/debug
+**/*.rs.bk
+*.pdb
+rust-project.json
+
+# ┌──────────┐
+# │ Taskfile │
+# └──────────┘
+
+.task

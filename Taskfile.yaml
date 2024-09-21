@@ -1,0 +1,63 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  dev:
+    desc: 👨🏻‍💻 run coco in «dev» mode
+    cmds:
+      - cargo watch -c -x "run --"
+
+  build:watch:
+    desc: ⚡ watch coco «build»
+    cmds:
+      - cargo watch -c -x "build"
+
+  build:
+    desc: ⚡ build coco «release» and check the size
+    cmds:
+      - cargo build --release
+      - python check_size.py
+
+  fmt:
+    desc: 🎨 format coco
+    cmds:
+      - cargo +nightly fmt --all
+  
+  fmt:check:
+    desc: 🎨 check coco formatting
+    cmds:
+      - cargo +nightly fmt --all --check
+
+  lint:
+    desc: 🧶 lint coco
+    cmds:
+      - cargo clippy --fix --workspace --allow-staged
+  
+  lint:check:
+    desc: 🧶 check coco linting
+    cmds:
+      - cargo clippy --workspace
+
+  fmt+lint:
+    desc: 🎨🧶 format and lint coco
+    cmds:
+      - task fmt
+      - git add .
+      - task lint
+
+  release:patch:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release patch --execute --no-confirm --package coco
+
+  release:minor:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release minor --execute --no-confirm --package coco
+
+  release:major:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release major --execute --no-confirm --package coco
+

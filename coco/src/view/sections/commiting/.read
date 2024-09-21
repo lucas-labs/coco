@@ -1,0 +1,9 @@
+A view that shows the logo flashing while the commit is being made.
+
+I'm not sure if the commit should be done here or by sending a message on the bus, which would be
+read in the main and executed in a Tokio spawn. I think it's better to do it in the main, and have
+this view simply act as a "loading state," which could even be reused elsewhere.
+
+This view has no interaction or navigation; it simply shows the logo flashing. It’s the router’s
+responsibility to decide when to show this view and when to show the summary view, where the commit
+result or error message is displayed.

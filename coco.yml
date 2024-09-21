@@ -1,0 +1,18 @@
+theme:
+  primary: '#dcff3f'
+  primary-fg: '#000000'
+
+  # textareas
+  'textarea:bg': '#050f21'
+  'textarea:fg': '#ffffff'
+  'textarea:sel': '#232a38'
+  
+  # Scope
+  'scope:bg': '#125acc'
+  'scope:fg': '#ffffff'
+  'scope:sec': '#000000'
+
+# scopes:
+#   - "source"
+#   - "meta"
+#   - "keyword"
