@@ -1,6 +1,6 @@
 use {
     super::app_router::AppRouter,
-    cc_core::state::{default_app_state, MutexAppState},
+    cc_core::state::MutexAppState,
     matetui::{
         children, component,
         ratatui::prelude::{Frame, Rect},
@@ -55,9 +55,7 @@ component! {
 }
 
 impl MainComponent {
-    pub fn new() -> Self {
-        let state = default_app_state();
-
+    pub fn new(state: MutexAppState) -> Self {
         Self {
             app_state: state.clone(),
             app_status: AppStatus::Ready,
