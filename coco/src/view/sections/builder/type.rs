@@ -7,7 +7,7 @@ use {
         component,
         ratatui::{
             layout::Rect,
-            prelude::{Color, Constraint, Direction, Layout},
+            prelude::{Color, Constraint, Layout},
             style::Stylize,
             text::Line,
             widgets::Paragraph,

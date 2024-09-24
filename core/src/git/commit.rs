@@ -1,13 +1,15 @@
 //! Git Commit
 //!
 //! This module provides a way to execute a git commit command.
-use crate::{
-    git::commit_info::commit_info,
-    state::commit::{CommitInfo, ConventionalCommitMessage},
+use {
+    crate::{
+        git::commit_info::commit_info,
+        state::commit::{CommitInfo, ConventionalCommitMessage},
+    },
+    eyre::Result,
+    lool::fail,
+    std::process::Command,
 };
-use eyre::Result;
-use lool::fail;
-use std::process::Command;
 
 /// Commit the changes to the repository with the given commit message in the directory specified by
 /// `cwd`. If `cwd` is not provided, the current working directory is used.
@@ -60,7 +62,7 @@ mod tests {
 
     #[test]
     fn test_output_parsing() {
-        let output = vec![
+        let output = [
             "[master e63e7aa] the first line of the message!",
             " 1 file changed, 0 insertions(+), 0 deletions(-)",
             " create mode 100644 wqeqwex.txt",

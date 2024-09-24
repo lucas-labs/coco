@@ -5,11 +5,15 @@ pub mod components {
 }
 
 pub mod widgets {
+    mod coco_header;
     pub mod coco_help;
     mod coco_logo;
     mod coco_textarea;
     mod commit_msg;
+    mod status_hint;
 
-    pub use coco_logo::CocoLogo;
-    pub use {coco_textarea::LabeledTextArea, commit_msg::CommitMessage};
+    pub use {
+        coco_header::CocoHeader, coco_logo::CocoLogo, coco_textarea::LabeledTextArea,
+        commit_msg::CommitMessage, status_hint::StatusHint,
+    };
 }

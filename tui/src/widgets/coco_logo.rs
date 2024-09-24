@@ -59,17 +59,16 @@ impl CocoLogo {
 
 impl Widget for CocoLogo {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        let mut lines = vec![];
-
-        lines.push(Line::from(vec![
-            Span::styled("╔══ ╔═╗ ", self.style_left),
-            Span::styled("╔══ ╔═╗", self.style_right),
-        ]));
-
-        lines.push(Line::from(vec![
-            Span::styled("╚══ ╚═╝ ", self.style_left),
-            Span::styled("╚══ ╚═╝", self.style_right),
-        ]));
+        let lines = vec![
+            Line::from(vec![
+                Span::styled("╔══ ╔═╗ ", self.style_left),
+                Span::styled("╔══ ╔═╗", self.style_right),
+            ]),
+            Line::from(vec![
+                Span::styled("╚══ ╚═╝ ", self.style_left),
+                Span::styled("╚══ ╚═╝", self.style_right),
+            ]),
+        ];
 
         let paragraph = Paragraph::new(Text::from(lines)).alignment(self.align);
         paragraph.render(area, buf);

@@ -5,11 +5,12 @@ use {
         ratatui::{
             crossterm::event::KeyEvent,
             layout::{Constraint, Direction, Layout, Rect},
+            style::Color,
         },
         widgets::textarea::{validators::required_validator, Input},
         Action, Component, ComponentAccessors, Frame,
     },
-    tui::widgets::LabeledTextArea,
+    tui::widgets::{CocoHeader, LabeledTextArea, StatusHint},
 };
 
 #[derive(PartialEq, Default)]
@@ -142,7 +143,7 @@ impl CommitStep {
 
     /// Calculate the layout for the commit steps, showing the summary, body, and footer inputs
     /// one below the other in a vertical layout.
-    fn get_layout(&self, area: Rect) -> (Rect, Rect, Rect) {
+    fn get_textareas_layout(&self, area: Rect) -> (Rect, Rect, Rect) {
         let areas = Layout::default()
             .direction(Direction::Vertical)
             .constraints([
@@ -155,6 +156,12 @@ impl CommitStep {
             .split(area);
 
         (areas[0], areas[2], areas[4])
+    }
+
+    /// Get the main layout
+    fn layout(&self, area: Rect) -> [Rect; 3] {
+        Layout::vertical([Constraint::Length(2), Constraint::Length(2), Constraint::Fill(1)])
+            .areas(area)
     }
 }
 
@@ -183,7 +190,20 @@ impl Component for CommitStep {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
-        let (summary_area, body_area, footer_area) = self.get_layout(area);
+        let [header_area, title_area, area] = self.layout(area);
+
+        let (kind, scope) = {
+            let state = self.app_state.lock().unwrap();
+            (state.get_kind(), state.get_scope())
+        };
+
+        // draw the header and title
+        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let title = StatusHint::new(kind, scope);
+        f.render_widget(header, header_area);
+        f.render_widget(title, title_area);
+
+        let (summary_area, body_area, footer_area) = self.get_textareas_layout(area);
 
         f.render_widget(&self.summary_input, summary_area);
         f.render_widget(&self.body_input, body_area);

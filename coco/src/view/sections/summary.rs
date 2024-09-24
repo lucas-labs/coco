@@ -1,16 +1,18 @@
-use cc_core::{
-    config::Theme,
-    state::{commit::ConventionalCommitMessage, MutexAppState},
-};
-use matetui::{
-    component,
-    ratatui::{
-        layout::{Constraint, Flex, Layout, Rect},
-        style::{Style, Stylize},
-        text::{Line, Text},
-        widgets::{Block, Borders, Padding, Paragraph},
+use {
+    cc_core::{
+        config::Theme,
+        state::{commit::ConventionalCommitMessage, MutexAppState},
     },
-    Action, Component, ComponentAccessors, Frame,
+    matetui::{
+        component,
+        ratatui::{
+            layout::{Constraint, Flex, Layout, Rect},
+            style::{Style, Stylize},
+            text::{Line, Text},
+            widgets::{Block, Borders, Padding, Paragraph},
+        },
+        Action, Component, ComponentAccessors, Frame,
+    },
 };
 
 component! {
@@ -76,7 +78,7 @@ impl Component for SummarySection {
                 Line::from(vec!["Author ".bold(), "Lucas Colombo".into()]),
                 Line::from(vec!["Date   ".bold(), "Fri Sep 30 11:26:28 2022 -0300".into()]),
                 "".into(),
-                format!("{}", commit.raw_title()).magenta().into(),
+                commit.raw_title().to_string().magenta().into(),
                 "".into(),
             ]);
 

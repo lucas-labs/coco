@@ -14,7 +14,7 @@ use {
         widgets::gridselector::{GridItem, GridSelector, GridSelectorState},
         Action, Component, ComponentAccessors, Frame,
     },
-    tui::widgets::LabeledTextArea,
+    tui::widgets::{CocoHeader, LabeledTextArea, StatusHint},
 };
 
 component! {
@@ -111,15 +111,30 @@ impl Component for ScopeStep {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
+        let [header_area, title_area, area] =
+            Layout::vertical([Constraint::Length(2), Constraint::Length(2), Constraint::Fill(1)])
+                .areas(area);
+
+        // TODO: consider using RCU locks for the app state
+        //       if locking on each render is too slow, consider using RCU locks.
+        //       See: https://crates.io/crates/keepcalm
+        let (kind, scope) = {
+            let state = self.app_state.lock().unwrap();
+            (state.get_kind(), state.get_scope())
+        };
+
+        // draw the header and title
+        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let title = StatusHint::new(kind, scope);
+        f.render_widget(header, header_area);
+        f.render_widget(title, title_area);
+
         if let Some(scope_input) = self.scope_input.as_ref() {
             // render text area
+            let [textarea_area] =
+                Layout::vertical([Constraint::Length(scope_input.get_height())]).areas(area);
 
-            let areas = Layout::default()
-                .direction(Direction::Vertical)
-                .constraints([Constraint::Length(scope_input.get_height())])
-                .split(area);
-
-            f.render_widget(scope_input, areas[0]);
+            f.render_widget(scope_input, textarea_area);
         } else if let Some(grid_state) = self.grid_state.as_mut() {
             // render grid selector
             let [description_area, rest] = Layout::default()

@@ -1,7 +1,8 @@
-use cc_core::config::Theme;
-use matetui::{component, ratatui::layout::Rect, Component, Frame};
-use tui::help;
-use tui::widgets::coco_help::CocoHelp;
+use {
+    cc_core::config::Theme,
+    matetui::{component, ratatui::layout::Rect, Component, Frame},
+    tui::{help, widgets::coco_help::CocoHelp},
+};
 
 component! {
     pub struct HelpSection {

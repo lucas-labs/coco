@@ -13,7 +13,7 @@ use {
         },
         Component, ComponentAccessors, Frame,
     },
-    tui::widgets::CommitMessage,
+    tui::widgets::{CocoHeader, CommitMessage},
 };
 
 component! {
@@ -39,7 +39,12 @@ impl PreviewStep {
         state.set_step_status(step, status);
     }
 
-    fn get_layout(&self, wrapper: Rect, commit: &ConventionalCommitMessage) -> [Rect; 3] {
+    /// Get the main layout
+    fn layout(&self, area: Rect) -> [Rect; 2] {
+        Layout::vertical([Constraint::Length(2), Constraint::Fill(1)]).areas(area)
+    }
+
+    fn get_body_layout(&self, wrapper: Rect, commit: &ConventionalCommitMessage) -> [Rect; 3] {
         // the biggest width of the commit message texts
         let (width, height) = commit.size();
 
@@ -85,9 +90,12 @@ impl Component for PreviewStep {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
+        let [header_area, area] = self.layout(area);
+        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+
         let commit = { self.app_state.lock().unwrap().get_commit_message() };
 
-        let [commit_area, description_area, decision_area] = self.get_layout(area, &commit);
+        let [commit_area, description_area, decision_area] = self.get_body_layout(area, &commit);
         let block = Block::default().padding(Padding::symmetric(2, 1)).on_white();
 
         let description = Paragraph::new("Do you wish to continue and execute the commit?")
@@ -113,6 +121,7 @@ impl Component for PreviewStep {
         .alignment(Alignment::Center);
 
         // render all
+        f.render_widget(header, header_area);
         f.render_widget(CommitMessage::new(commit), block.inner(commit_area));
         f.render_widget(block, commit_area);
         f.render_widget(description, description_area);

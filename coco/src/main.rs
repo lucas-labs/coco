@@ -39,7 +39,7 @@ async fn main() -> Result<()> {
 
                 let mut app = App::default()
                     .with_frame_rate(32)
-                    .with_tick_rate(32)
+                    .with_tick_rate(1)
                     .with_keybindings(kb! {
                         "<ctrl-c>" => MatetuiAction::Quit,
                         "<up>" => "kb:up",

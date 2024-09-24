@@ -1,14 +1,16 @@
-use cc_core::{config::Theme, git, state::MutexAppState};
-use matetui::{
-    child_downcast_mut, children, component,
-    ratatui::{
-        layout::{Constraint, Direction, Flex, Layout, Rect},
-        style::Stylize,
-        widgets::Paragraph,
+use {
+    cc_core::{config::Theme, git, state::MutexAppState},
+    matetui::{
+        child_downcast_mut, children, component,
+        ratatui::{
+            layout::{Constraint, Direction, Flex, Layout, Rect},
+            style::Stylize,
+            widgets::Paragraph,
+        },
+        Component, ComponentAccessors, Frame,
     },
-    Component, ComponentAccessors, Frame,
+    tui::components::LogoComponent,
 };
-use tui::components::LogoComponent;
 
 component! {
     pub struct CommittingSection {

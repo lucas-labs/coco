@@ -13,6 +13,7 @@ use {
         widgets::switch::Switch,
         Component, ComponentAccessors, Frame,
     },
+    tui::widgets::CocoHeader,
 };
 
 component! {
@@ -39,7 +40,20 @@ impl BreakingChangeStep {
         state.set_step_status(step, status);
     }
 
-    fn get_layout(&self, area: Rect) -> [Rect; 2] {
+    fn toggle_breaking_change(&mut self) {
+        self.breaking_change_choice = !self.breaking_change_choice;
+    }
+
+    fn set_breaking_change(&mut self, choice: bool) {
+        self.breaking_change_choice = choice;
+    }
+
+    /// Get the main layout
+    fn layout(&self, area: Rect) -> [Rect; 2] {
+        Layout::vertical([Constraint::Length(2), Constraint::Fill(1)]).areas(area)
+    }
+
+    fn get_body_layout(&self, area: Rect) -> [Rect; 2] {
         let [title, rest] = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Length(2), Constraint::Min(0)])
@@ -53,14 +67,6 @@ impl BreakingChangeStep {
             .areas(rest);
 
         [title, switch]
-    }
-
-    fn toggle_breaking_change(&mut self) {
-        self.breaking_change_choice = !self.breaking_change_choice;
-    }
-
-    fn set_breaking_change(&mut self, choice: bool) {
-        self.breaking_change_choice = choice;
     }
 }
 
@@ -82,7 +88,10 @@ impl Component for BreakingChangeStep {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
-        let [title_area, rest_area] = self.get_layout(area);
+        let [header_area, area] = self.layout(area);
+        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+
+        let [title_area, rest_area] = self.get_body_layout(area);
         let switch = Switch::with_status(self.breaking_change_choice)
             .with_color_on(Color::Green)
             .with_color_switch(Color::White)
@@ -99,6 +108,7 @@ impl Component for BreakingChangeStep {
             ")".into(),
         ]);
 
+        f.render_widget(header, header_area);
         f.render_widget(Paragraph::new(line).centered(), title_area);
         f.render_widget(switch, rest_area);
     }

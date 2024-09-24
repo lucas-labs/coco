@@ -3,9 +3,7 @@
 //! This module provides a way to execute a `git diff --name-only --cached` command to get a list of
 //! staged files.
 
-use eyre::Result;
-use lool::fail;
-use std::process::Command;
+use {eyre::Result, lool::fail, std::process::Command};
 
 /// Get a list of staged files in the repository.
 pub fn list_staged(cwd: Option<&str>) -> Result<Vec<String>> {
@@ -13,7 +11,7 @@ pub fn list_staged(cwd: Option<&str>) -> Result<Vec<String>> {
 
     let output = Command::new("git")
         .current_dir(cwd)
-        .args(&["--no-pager", "diff", "--name-only", "--cached"])
+        .args(["--no-pager", "diff", "--name-only", "--cached"])
         .output()?;
 
     if !output.status.success() {

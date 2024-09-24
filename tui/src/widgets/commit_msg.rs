@@ -68,6 +68,6 @@ impl Widget for CommitMessage {
 }
 
 /// returns true if the given all strings joined by \n ends up being empty or None
-fn is_empty(s: &Vec<String>) -> bool {
+fn is_empty(s: &[String]) -> bool {
     s.join("\n").is_empty()
 }

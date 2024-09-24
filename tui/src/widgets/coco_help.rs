@@ -1,10 +1,12 @@
-use matetui::ratatui::{
-    layout::{Constraint, Direction, Flex, Layout},
-    prelude::{Buffer, Line, Rect, Span, Stylize, Widget},
-    style::Style,
-    widgets::Paragraph,
+use {
+    matetui::ratatui::{
+        layout::{Constraint, Direction, Flex, Layout},
+        prelude::{Buffer, Line, Rect, Span, Stylize, Widget},
+        style::Style,
+        widgets::Paragraph,
+    },
+    std::rc::Rc,
 };
-use std::rc::Rc;
 
 pub struct HelpItem {
     pub description: String,
