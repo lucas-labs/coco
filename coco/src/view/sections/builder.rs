@@ -22,6 +22,11 @@ use {
     strum::{Display, EnumString},
 };
 
+// TODO: conditional builder steps
+//       - use the config to determine which steps to show, by reading the ask_* fields
+//       - also, implement the missing `use_emoji` field, to be able to disable emojis in the
+//         generated commit messages
+
 #[derive(Default, EnumString, Display, PartialEq, Eq, Clone)]
 #[strum(serialize_all = "kebab-case")]
 enum FormStep {

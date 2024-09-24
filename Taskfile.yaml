@@ -6,7 +6,7 @@ tasks:
   dev:
     desc: 👨🏻‍💻 run coco in «dev» mode
     cmds:
-      - cargo watch -c -x "run --"
+      - cargo watch -c -x "run -- --no-stage-check"
 
   build:watch:
     desc: ⚡ watch coco «build»

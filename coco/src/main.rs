@@ -21,9 +21,9 @@ async fn main() -> Result<()> {
 
     match action {
         Action::Help | Action::Version => handle_cli_action(action)?,
-        _ => match git::list_staged(Some("./")) {
+        Action::Coco(stage_check) => match git::list_staged(Some("./")) {
             Ok(staged) => {
-                if staged.is_empty() {
+                if staged.is_empty() && stage_check {
                     println!(
                         "{}",
                         "Nothing to commit! Stage your changes first ('git add .')".red()

@@ -85,6 +85,14 @@ impl Component for AppRouter {
         match message.as_str() {
             "builder:done" => self.route(ContentRoute::Committing),
             "committing:done" => self.route(ContentRoute::Summary),
+            // TODO: handle errors better
+            //       display errors when they happen. Not only for committing but for all, including
+            //       any possible panics that might occur.
+            //
+            //       Maybe using (human-panic)[https://ratatui.rs/recipes/apps/better-panic/] or
+            //       some kind of custom hook to catch panics and display them to the user in
+            //       our own way?
+            "committing:failed" => {}
             "kb:f2" => self.toggle_help(),
             _ => {}
         }

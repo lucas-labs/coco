@@ -4,7 +4,7 @@ use {eyre::Result, pico_args::Arguments};
 pub enum Action {
     Help,
     Version,
-    Default,
+    Coco(bool),
 }
 
 pub fn get_action() -> Result<Action> {
@@ -19,5 +19,10 @@ pub fn get_action() -> Result<Action> {
         return Ok(Action::Version);
     }
 
-    Ok(Action::Default)
+    // check if --no-stage-check was passed
+    if arguments.contains("--no-stage-check") {
+        return Ok(Action::Coco(false));
+    }
+
+    Ok(Action::Coco(true))
 }
