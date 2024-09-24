@@ -8,11 +8,14 @@ use {
         ratatui::{
             layout::Rect,
             prelude::{Color, Constraint, Direction, Layout},
+            style::Stylize,
+            text::Line,
             widgets::Paragraph,
         },
         widgets::gridselector::{GridSelector, GridSelectorState},
         Component, ComponentAccessors, Frame,
     },
+    tui::widgets::CocoLogo,
 };
 
 component!(
@@ -38,11 +41,14 @@ impl TypeStep {
         }
     }
 
-    fn get_layout(&self, area: Rect) -> [Rect; 2] {
-        Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Length(2), Constraint::Min(0)])
-            .areas(area)
+    fn get_layout(&self, area: Rect) -> [Rect; 4] {
+        Layout::vertical([
+            Constraint::Length(2),
+            Constraint::Length(3),
+            Constraint::Length(2),
+            Constraint::Min(0),
+        ])
+        .areas(area)
     }
 }
 
@@ -84,7 +90,15 @@ impl Component for TypeStep {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
-        let [title_area, rest_area] = self.get_layout(area);
+        let [logo_area, help_area, title_area, rest_area] = self.get_layout(area);
+
+        // #region Header
+        let logo = CocoLogo::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        f.render_widget(logo, logo_area);
+
+        let line = Line::from(vec!["Press".into(), " F2 ".bold(), "for help".into()]);
+        f.render_widget(Paragraph::new(line).centered(), help_area);
+        // #endregion
 
         f.render_widget(
             Paragraph::new(

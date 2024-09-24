@@ -15,6 +15,12 @@ use {
     view::main_component::MainComponent,
 };
 
+// TODO: i18n
+//       implement internationalization for all the literal strings in the app.
+//
+//       > Check the [rust-i18n](https://github.com/longbridgeapp/rust-i18n) crate for a possible
+//         half baked solution.
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let action = get_action()?;

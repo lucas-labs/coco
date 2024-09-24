@@ -1,11 +1,11 @@
 use {
+    crate::widgets::CocoLogo,
     cc_core::config::Theme,
     matetui::{
         component,
         ratatui::{
             layout::Rect,
-            prelude::{Alignment, Color, Line, Modifier, Span, Style, Text},
-            widgets::Paragraph,
+            prelude::{Alignment, Color, Modifier, Style},
         },
         Component, Frame,
     },
@@ -113,19 +113,8 @@ impl Component for LogoComponent {
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
-        let mut lines = vec![];
-        let (style1, style2) = self.colors();
-
-        lines.push(Line::from(vec![
-            Span::styled("╔══ ╔═╗ ", style1),
-            Span::styled("╔══ ╔═╗", style2),
-        ]));
-
-        lines.push(Line::from(vec![
-            Span::styled("╚══ ╚═╝ ", style1),
-            Span::styled("╚══ ╚═╝", style2),
-        ]));
-
-        f.render_widget(Paragraph::new(Text::from(lines)).alignment(Alignment::Center), area);
+        let (left_style, right_style) = self.colors();
+        let logo = CocoLogo::new(left_style, right_style, Alignment::Center);
+        f.render_widget(logo, area);
     }
 }
