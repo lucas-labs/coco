@@ -11,10 +11,11 @@ authors.workspace = true
 path = "src/lib.rs"
 
 [dependencies]
-lool = { workspace = true, features = ["macros", "cli.tui", "cli.tui.widgets"] }
+lool = { workspace = true, features = ["macros"] }
 eyre = { workspace = true }
 tokio = { workspace = true }
+matetui = { workspace = true }
 cc-core = { path = "../core" }
 unicode-width = "0.2.0"
-
+tokio-util = "0.7.12"
 

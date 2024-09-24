@@ -1,5 +1,5 @@
 use {
-    lool::tui::{
+    matetui::{
         ratatui::{
             backend::CrosstermBackend,
             crossterm::{
@@ -56,6 +56,5 @@ fn main() -> io::Result<()> {
     execute!(term.backend_mut(), LeaveAlternateScreen)?;
     term.show_cursor()?;
 
-    println!("Lines: {:?}", textarea.lines());
     Ok(())
 }

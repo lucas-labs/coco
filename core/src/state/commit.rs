@@ -1,32 +1,41 @@
 use unicode_width::UnicodeWidthStr;
 
-pub struct ConventionalCommit {
+#[derive(Debug, Clone)]
+pub struct CommitInfo {
+    pub hash: String,
+    pub author: String,
+    pub author_email: String,
+    pub date: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct Commit {
+    pub info: Option<CommitInfo>,
+    pub message: Option<ConventionalCommitMessage>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConventionalCommitMessage {
     pub kind: String,
-    pub emoji: Option<String>,
-    pub scope: Option<String>,
+    pub emoji: String,
+    pub scope: String,
     pub summary: String,
-    pub body: Option<Vec<String>>,
-    pub footer: Option<Vec<String>>,
+    pub body: Vec<String>,
+    pub footer: Vec<String>,
     pub breaking: bool,
 }
 
-impl ConventionalCommit {
+impl ConventionalCommitMessage {
     fn title_width(&self) -> u16 {
         UnicodeWidthStr::width(self.raw_title().as_str()) as u16
     }
 
     fn body_width(&self) -> u16 {
-        self.body
-            .as_ref()
-            .map(|b| b.iter().map(|s| UnicodeWidthStr::width(s.as_str())).max().unwrap_or(0))
-            .unwrap_or(0) as u16
+        self.body.iter().map(|s| UnicodeWidthStr::width(s.as_str())).max().unwrap_or(0) as u16
     }
 
     fn footer_width(&self) -> u16 {
-        self.footer
-            .as_ref()
-            .map(|f| f.iter().map(|s| UnicodeWidthStr::width(s.as_str())).max().unwrap_or(0))
-            .unwrap_or(0) as u16
+        self.footer.iter().map(|s| UnicodeWidthStr::width(s.as_str())).max().unwrap_or(0) as u16
     }
 
     pub fn width(&self) -> u16 {
@@ -36,30 +45,26 @@ impl ConventionalCommit {
     pub fn height(&self) -> u16 {
         let mut height = 1;
 
-        if let Some(body_lines) = &self.body {
-            let body = body_lines.join("\n");
-            if !body.is_empty() {
-                height += (body_lines.len() + 1) as u16;
-            }
+        let body = self.body.join("\n");
+        if !body.is_empty() {
+            height += (self.body.len() + 1) as u16;
         }
 
-        if let Some(footer_lines) = &self.footer {
-            let footer = footer_lines.join("\n");
+        let footer = self.footer.join("\n");
 
-            if !footer.is_empty() {
-                height += (footer_lines.len() + 1) as u16;
-            }
+        if !footer.is_empty() {
+            height += (self.footer.len() + 1) as u16;
         }
 
         height
     }
 
     pub fn raw_body(&self) -> String {
-        self.body.as_ref().map(|b| b.join("\n")).unwrap_or("".to_string())
+        self.body.join("\n").trim().to_string()
     }
 
     pub fn raw_footer(&self) -> String {
-        self.footer.as_ref().map(|f| f.join("\n")).unwrap_or("".to_string())
+        self.footer.join("\n").trim().to_string()
     }
 
     pub fn raw_title(&self) -> String {
@@ -67,26 +72,22 @@ impl ConventionalCommit {
             "{}{}{}: {}{}",
             self.kind,
             // if trimmed scope is not none or empty, then add it to the title
-            self.scope
-                .as_ref()
-                .map(|s| if !s.trim().is_empty() {
-                    format!("({})", s.trim())
-                } else {
-                    "".to_string()
-                })
-                .unwrap_or("".to_string()),
+            if !self.scope.trim().is_empty() {
+                format!("({})", self.scope.trim())
+            } else {
+                "".to_string()
+            },
             if self.breaking { "!" } else { "" },
             // if trimmed emoji is not none or empty, then add it to the title
-            self.emoji
-                .as_ref()
-                .map(|e| if !e.trim().is_empty() {
-                    format!("{} ", e.trim())
-                } else {
-                    "".to_string()
-                })
-                .unwrap_or("".to_string()),
+            if !self.emoji.trim().is_empty() {
+                format!("{} ", self.emoji.trim())
+            } else {
+                "".to_string()
+            },
             self.summary
         )
+        .trim()
+        .to_string()
     }
 
     pub fn raw_commit(&self) -> String {

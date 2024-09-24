@@ -2,7 +2,7 @@ pub mod commit;
 
 use {
     crate::config::{CocoConfig, CommitKind},
-    commit::ConventionalCommit,
+    commit::{Commit, CommitInfo, ConventionalCommitMessage},
     std::{
         collections::HashMap,
         sync::{Arc, Mutex},
@@ -20,7 +20,6 @@ pub enum StepStatus {
 /// The global application state, which will be shared between the main component and its children.
 pub struct AppState {
     pub config: CocoConfig,
-    sender: Option<tokio::sync::mpsc::UnboundedSender<String>>,
     step_status: HashMap<String, StepStatus>,
     kind: Option<CommitKind>,
     scope: Option<String>,
@@ -28,12 +27,12 @@ pub struct AppState {
     body: Option<Vec<String>>,
     footer: Option<Vec<String>>,
     breaking: bool,
+    commit_info: Option<CommitInfo>,
 }
 
 impl AppState {
     fn new() -> Self {
         Self {
-            sender: None,
             step_status: HashMap::new(),
             config: CocoConfig::from_files(),
             kind: None,
@@ -42,17 +41,8 @@ impl AppState {
             body: None,
             footer: None,
             breaking: false,
+            commit_info: None,
         }
-    }
-
-    // fn send(&self, action: String) {
-    //     if let Some(sender) = self.sender.as_ref() {
-    //         let _ = sender.send(action);
-    //     }
-    // }
-
-    pub fn set_sender(&mut self, sender: tokio::sync::mpsc::UnboundedSender<String>) {
-        self.sender = Some(sender);
     }
 
     pub fn get_kind(&self) -> Option<CommitKind> {
@@ -114,6 +104,10 @@ impl AppState {
         self.breaking
     }
 
+    pub fn set_commit_info(&mut self, info: CommitInfo) {
+        self.commit_info = Some(info);
+    }
+
     fn update_commit_step_status(&mut self) {
         // if summary length is > 0, and body and footer are not None, then set the status to valid
         let status = if self.summary.is_some()
@@ -129,21 +123,34 @@ impl AppState {
         self.set_step_status("commit", status);
     }
 
-    pub fn get_commit(&self) -> ConventionalCommit {
-        ConventionalCommit {
+    pub fn get_commit_message(&self) -> ConventionalCommitMessage {
+        ConventionalCommitMessage {
             // name of the kind
             kind: self.kind.as_ref().map(|k| k.name.clone()).unwrap_or_default(),
-            emoji: self.kind.as_ref().map(|k| k.emoji.clone()),
-            scope: self.scope.clone(),
+            emoji: self.kind.as_ref().map(|k| k.emoji.clone()).unwrap_or_default(),
+            scope: self.scope.clone().unwrap_or_default(),
             summary: self.summary.clone().unwrap_or_default(),
-            body: self.body.clone(),
-            footer: self.footer.clone(),
+            body: self.body.clone().unwrap_or_default(),
+            footer: self.footer.clone().unwrap_or_default(),
             breaking: self.breaking,
+        }
+    }
+
+    pub fn get_commit(&self) -> Commit {
+        Commit {
+            info: self.commit_info.clone(),
+            message: Some(self.get_commit_message()),
         }
     }
 }
 
 pub type MutexAppState = Arc<Mutex<AppState>>;
+
+impl Default for AppState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 pub fn default_app_state() -> MutexAppState {
     MutexAppState::new(Mutex::new(AppState::new()))

@@ -1,14 +1,17 @@
 use {
-    cc_core::{color, state::commit::ConventionalCommit},
-    lool::tui::ratatui::{widgets::Paragraph, Buffer, Line, Rect, Span, Stylize, Widget},
+    cc_core::{color, state::commit::ConventionalCommitMessage},
+    matetui::ratatui::{
+        prelude::{Buffer, Line, Rect, Span, Stylize, Widget},
+        widgets::Paragraph,
+    },
 };
 
 pub struct CommitMessage {
-    msg: ConventionalCommit,
+    msg: ConventionalCommitMessage,
 }
 
 impl CommitMessage {
-    pub fn new(msg: ConventionalCommit) -> Self {
+    pub fn new(msg: ConventionalCommitMessage) -> Self {
         Self { msg }
     }
 }
@@ -24,14 +27,12 @@ impl Widget for CommitMessage {
         // the emoji is only shown if emoji is present
         let mut description_line = vec![Span::from(self.msg.kind).bold().fg(color("#8cc265"))];
 
-        if let Some(scope) = &self.msg.scope {
-            if !scope.is_empty() {
-                description_line.extend_from_slice(&[
-                    "(".black(),
-                    Span::from(scope).bold().fg(color("#125acc")),
-                    ")".black(),
-                ]);
-            }
+        if !self.msg.scope.is_empty() {
+            description_line.extend_from_slice(&[
+                "(".black(),
+                Span::from(self.msg.scope).bold().fg(color("#125acc")),
+                ")".black(),
+            ]);
         }
 
         if self.msg.breaking {
@@ -40,31 +41,25 @@ impl Widget for CommitMessage {
 
         description_line.push(Span::from(": ").black());
 
-        if let Some(emoji) = &self.msg.emoji {
-            description_line.extend_from_slice(&[Span::from(format!("{} ", emoji)).bold()]);
-        };
+        description_line.extend_from_slice(&[Span::from(format!("{} ", self.msg.emoji)).bold()]);
 
         description_line.push(Span::from(self.msg.summary).fg(color("#6a4ac3")));
 
         lines.push(Line::from(description_line));
 
-        if let Some(body) = &self.msg.body {
-            if !is_empty(body) {
-                lines.push(Line::from(vec![Span::from("")]));
+        if !is_empty(&self.msg.body) {
+            lines.push(Line::from(vec![Span::from("")]));
 
-                for line in body {
-                    lines.push(Line::from(vec![Span::from(line)]).fg(color("#f34e70")));
-                }
+            for line in self.msg.body {
+                lines.push(Line::from(vec![Span::from(line)]).fg(color("#f34e70")));
             }
         }
 
-        if let Some(footer) = &self.msg.footer {
-            if !is_empty(footer) {
-                lines.push(Line::from(vec![Span::from("")]));
+        if !is_empty(&self.msg.footer) {
+            lines.push(Line::from(vec![Span::from("")]));
 
-                for line in footer {
-                    lines.push(Line::from(vec![Span::from(line)]).fg(color("#db279f")));
-                }
+            for line in self.msg.footer {
+                lines.push(Line::from(vec![Span::from(line)]).fg(color("#db279f")));
             }
         }
 

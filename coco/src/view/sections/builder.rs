@@ -11,12 +11,10 @@ use {
         state::{MutexAppState, StepStatus},
     },
     commit::CommitStep,
-    eyre::Result,
-    lool::{
-        children,
-        tui::{
-            ratatui::Rect, utils::component::pass_message_to_children, Children, Component, Frame,
-        },
+    matetui::{
+        children, component,
+        ratatui::prelude::{Frame, Rect},
+        Component, ComponentAccessors,
     },
     preview::PreviewStep,
     r#type::TypeStep,
@@ -61,11 +59,12 @@ impl FormStep {
     }
 }
 
-pub struct BuilderSection {
-    steps: Children,
-    _theme: Theme,
-    app_state: MutexAppState,
-    current_step: FormStep,
+component! {
+    pub struct BuilderSection {
+        _theme: Theme,
+        app_state: MutexAppState,
+        current_step: FormStep,
+    }
 }
 
 impl BuilderSection {
@@ -74,13 +73,14 @@ impl BuilderSection {
             _theme: theme.clone(),
             app_state: app_state.clone(),
             current_step: FormStep::Type,
-            steps: children!(
-                "type" => TypeStep::new(theme.clone(), app_state.clone()),
+            children: children!(
+                "type" => TypeStep::new(theme.clone(), app_state.clone()).as_active(),
                 "scope" => ScopeStep::new(theme.clone(), app_state.clone()),
                 "commit" => CommitStep::new(theme.clone(), app_state.clone()),
                 "breaking-change" => BreakingChangeStep::new(theme.clone(), app_state.clone()),
                 "preview" => PreviewStep::new(theme.clone(), app_state.clone())
             ),
+            ..Default::default()
         }
     }
 
@@ -100,7 +100,7 @@ impl BuilderSection {
                 self.current_step = step;
 
                 // set all children to inactive except the current step
-                for (key, component) in self.steps.iter_mut() {
+                for (key, component) in self.children.iter_mut() {
                     component.set_active(key == &self.current_step.to_string());
                 }
             }
@@ -109,27 +109,18 @@ impl BuilderSection {
 }
 
 impl Component for BuilderSection {
-    fn receive_message(&mut self, message: String) -> Result<()> {
+    fn receive_message(&mut self, message: String) {
         match message.as_str() {
             "builder:next" => self.set_step(self.current_step.next()),
             "builder:prev" => self.set_step(self.current_step.prev()),
+            "builder:restart" => self.set_step(Some(FormStep::Type)),
             _ => {}
         }
-
-        pass_message_to_children(self, message)?;
-
-        Ok(())
     }
 
-    fn get_children(&mut self) -> Option<&mut Children> {
-        Some(&mut self.steps)
-    }
-
-    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) -> Result<()> {
+    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let key = self.current_step.to_string();
         let component = self.child_mut(&key).unwrap();
-        component.draw(f, area)?;
-
-        Ok(())
+        component.draw(f, area);
     }
 }

@@ -1,12 +1,12 @@
 use {
-    lool::tui::{
+    matetui::{
         ratatui::{
             buffer::Buffer,
             layout::{Constraint, Direction, Flex, Layout, Rect},
+            prelude::{Alignment, Line, Span, Widget},
             style::{Color, Modifier, Style},
             text::Text,
             widgets::{Block, Padding, Paragraph},
-            Alignment, Line, Span, Widget,
         },
         widgets::textarea::{Input, TextArea, ValidationResult},
     },

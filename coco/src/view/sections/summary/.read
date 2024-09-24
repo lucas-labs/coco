@@ -1,7 +1,0 @@
-This view will display:
-
-- the confirmation message for the commit result (the full commit text), its hash, and authorship
-  information (author’s name, email, and commit date), or the error message if the commit failed.
-
-- From here, there is no navigation available. The only thing we can do is press any key, which will
-  trigger the application to close.

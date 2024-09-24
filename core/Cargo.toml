@@ -15,6 +15,8 @@ lool = { workspace = true, features = ["cli.stylize", "macros"] }
 eyre = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true }
+matetui = { workspace = true }
+
 serde_yaml = "0.9.33"
 dirs = "5.0.1"
 unicode-width = "0.2.0"

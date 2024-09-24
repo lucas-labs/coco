@@ -1,6 +1,7 @@
-use {lool::tui::ratatui::Color, std::str::FromStr};
+use {matetui::ratatui::prelude::Color, std::str::FromStr};
 
 pub mod config;
+pub mod git;
 pub mod state;
 
 /// Convert a hex color to a [Color] or return [Color::Reset] if the conversion fails.

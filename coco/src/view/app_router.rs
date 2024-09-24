@@ -1,33 +1,32 @@
 use {
-    super::sections::builder::BuilderSection,
+    super::sections::{
+        builder::BuilderSection, committing::CommittingSection, help::HelpSection,
+        summary::SummarySection,
+    },
     cc_core::state::MutexAppState,
-    eyre::Result,
-    lool::{
-        children,
-        tui::{
-            ratatui::{Frame, Rect},
-            utils::component::{pass_action_handler_to_children, pass_message_to_children},
-            Children, Component,
-        },
+    matetui::{
+        children, component,
+        ratatui::prelude::{Frame, Rect},
+        Component, ComponentAccessors,
     },
     strum::{Display, EnumString},
 };
 
-#[derive(Default, EnumString, Display, PartialEq, Eq, Clone)]
+#[derive(Default, EnumString, Display, PartialEq, Eq, Clone, Debug)]
 #[strum(serialize_all = "kebab-case")]
 enum ContentRoute {
     #[default]
     Builder,
-    TodoView,
+    Committing,
+    Summary,
+    Help,
 }
 
-/// 📋 » index of the app
-///
-/// shows the list of todos
-pub struct AppRouter {
-    children: Children,
-    sender: Option<tokio::sync::mpsc::UnboundedSender<String>>,
-    current_route: ContentRoute,
+component! {
+    pub struct AppRouter {
+        stashed_route: Option<ContentRoute>,
+        current_route: ContentRoute,
+    }
 }
 
 impl AppRouter {
@@ -40,14 +39,16 @@ impl AppRouter {
 
         Self {
             children: children!(
-                "builder" => BuilderSection::new(theme.clone(), app_state)
+                "builder" => BuilderSection::new(theme.clone(), app_state.clone()).as_active(),
+                "committing" => CommittingSection::new(theme.clone(), app_state.clone()),
+                "summary" => SummarySection::new(theme.clone(), app_state.clone()),
+                "help" => HelpSection::new(theme.clone())
             ),
             current_route: ContentRoute::default(),
-            sender: None,
+            ..Default::default()
         }
     }
 
-    #[allow(dead_code)]
     fn route(&mut self, route: ContentRoute) {
         let current_component = self.child_mut(&self.current_route.to_string()).unwrap();
         current_component.set_active(false);
@@ -58,45 +59,40 @@ impl AppRouter {
         self.current_route = route.clone();
     }
 
-    fn draw_route_content(&mut self, f: &mut Frame<'_>, rect: Rect) -> Result<()> {
+    fn toggle_help(&mut self) {
+        // if current route is help, go back to the stashed route (and clear the stash)
+        // and if there's no stashed route, we show the help
+
+        if self.current_route == ContentRoute::Help {
+            if let Some(route) = self.stashed_route.take() {
+                self.route(route);
+            }
+        } else {
+            self.stashed_route = Some(self.current_route.clone());
+            self.route(ContentRoute::Help);
+        }
+    }
+
+    fn draw_route_content(&mut self, f: &mut Frame<'_>, rect: Rect) {
         let key = self.current_route.to_string();
         let component = self.child_mut(&key).unwrap();
-        component.draw(f, rect)?;
-
-        Ok(())
+        component.draw(f, rect);
     }
 }
 
 impl Component for AppRouter {
-    fn register_action_handler(
-        &mut self,
-        tx: tokio::sync::mpsc::UnboundedSender<String>,
-    ) -> Result<()> {
-        self.sender = Some(tx.clone());
-        pass_action_handler_to_children(self, tx)
-    }
-
-    fn get_children(&mut self) -> Option<&mut Children> {
-        Some(&mut self.children)
-    }
-
-    fn receive_message(&mut self, message: String) -> Result<()> {
+    fn receive_message(&mut self, message: String) {
         match message.as_str() {
-            _other => {
-                // if let Some(sender) = self.sender.as_ref() {
-                //     if other == "q" {
-                //         let _ = sender.send(Action::Quit.to_string());
-                //     }
-                // }
-            }
+            "builder:done" => self.route(ContentRoute::Committing),
+            "committing:done" => self.route(ContentRoute::Summary),
+            "kb:f2" => self.toggle_help(),
+            _ => {}
         }
-
-        pass_message_to_children(self, message)
     }
 
-    fn draw(&mut self, f: &mut Frame<'_>, rect: Rect) -> Result<()> {
+    fn draw(&mut self, f: &mut Frame<'_>, rect: Rect) {
         let buf = f.buffer_mut();
         buf.reset();
-        self.draw_route_content(f, rect)
+        self.draw_route_content(f, rect);
     }
 }

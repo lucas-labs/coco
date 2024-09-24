@@ -1,23 +1,20 @@
 use {
     cc_core::{config::Theme, state::MutexAppState},
-    eyre::Result,
-    lool::{
-        s,
-        tui::{
-            ratatui::{
-                crossterm::event::KeyEvent,
-                layout::{Constraint, Direction, Layout, Rect},
-            },
-            widgets::textarea::{validators::required_validator, Input},
-            Action, Component, Frame,
+    matetui::{
+        component,
+        ratatui::{
+            crossterm::event::KeyEvent,
+            layout::{Constraint, Direction, Layout, Rect},
         },
+        widgets::textarea::{validators::required_validator, Input},
+        Action, Component, ComponentAccessors, Frame,
     },
-    tokio::sync::mpsc::UnboundedSender,
     tui::widgets::LabeledTextArea,
 };
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Default)]
 enum InputType {
+    #[default]
     Summary,
     Body,
     Footer,
@@ -52,16 +49,15 @@ impl InputType {
     }
 }
 
-pub struct CommitStep {
-    // children: Children,
-    _theme: Theme,
-    app_state: MutexAppState,
-    active: bool,
-    sender: Option<UnboundedSender<String>>,
-    summary_input: LabeledTextArea<'static>,
-    body_input: LabeledTextArea<'static>,
-    footer_input: LabeledTextArea<'static>,
-    active_input: InputType,
+component! {
+    pub struct CommitStep {
+        _theme: Theme,
+        app_state: MutexAppState,
+        summary_input: LabeledTextArea<'static>,
+        body_input: LabeledTextArea<'static>,
+        footer_input: LabeledTextArea<'static>,
+        active_input: InputType,
+    }
 }
 
 impl CommitStep {
@@ -85,17 +81,10 @@ impl CommitStep {
             active_input: InputType::Summary,
             _theme: theme.clone(),
             app_state: app_state.clone(),
-            active: false,
-            sender: None,
             summary_input,
             body_input,
             footer_input,
-        }
-    }
-
-    fn send(&self, action: String) {
-        if let Some(sender) = self.sender.as_ref() {
-            let _ = sender.send(action);
+            ..Default::default()
         }
     }
 
@@ -106,11 +95,11 @@ impl CommitStep {
         };
 
         match result {
-            NavigationResult::PrevStep => self.send(s!("builder:prev")),
+            NavigationResult::PrevStep => self.send("builder:prev"),
             NavigationResult::NextStep => {
                 if self.are_all_inputs_valid() {
                     self.update_inputs_active_states(None);
-                    self.send(s!("builder:next"));
+                    self.send("builder:next");
                 }
             }
             NavigationResult::Input(input) => self.update_inputs_active_states(Some(input)),
@@ -170,12 +159,7 @@ impl CommitStep {
 }
 
 impl Component for CommitStep {
-    fn register_action_handler(&mut self, tx: UnboundedSender<String>) -> Result<()> {
-        self.sender = Some(tx.clone());
-        Ok(())
-    }
-
-    fn receive_message(&mut self, message: String) -> Result<()> {
+    fn receive_message(&mut self, message: String) {
         if self.is_active() {
             match message.as_str() {
                 "kb:enter" | "kb:pagedown" => self.navigate(NavigationDirection::Next),
@@ -183,19 +167,9 @@ impl Component for CommitStep {
                 _ => {}
             }
         }
-
-        Ok(())
     }
 
-    fn set_active(&mut self, active: bool) {
-        self.active = active;
-    }
-
-    fn is_active(&self) -> bool {
-        self.active
-    }
-
-    fn handle_key_events(&mut self, key: KeyEvent) -> Result<Option<Action>> {
+    fn handle_key_events(&mut self, key: KeyEvent) -> Option<Action> {
         let input = Input::from(key);
 
         // pass the input to the active input
@@ -205,16 +179,14 @@ impl Component for CommitStep {
             InputType::Footer => self.footer_input.input(input),
         };
 
-        Ok(None)
+        None
     }
 
-    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) -> Result<()> {
+    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let (summary_area, body_area, footer_area) = self.get_layout(area);
 
         f.render_widget(&self.summary_input, summary_area);
         f.render_widget(&self.body_input, body_area);
         f.render_widget(&self.footer_input, footer_area);
-
-        Ok(())
     }
 }

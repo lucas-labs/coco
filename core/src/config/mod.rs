@@ -2,10 +2,8 @@ mod search;
 
 use {
     crate::color,
-    lool::{
-        s,
-        tui::{ratatui::style::Color, widgets::gridselector::GridItem},
-    },
+    lool::s,
+    matetui::{ratatui::style::Color, widgets::gridselector::GridItem},
     search::fetch_config_paths,
     serde::{Deserialize, Deserializer},
     serde_yaml::from_reader,

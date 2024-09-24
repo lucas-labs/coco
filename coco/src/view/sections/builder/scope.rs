@@ -3,27 +3,27 @@ use {
         config::Theme,
         state::{MutexAppState, StepStatus},
     },
-    eyre::Result,
-    lool::tui::{
+    matetui::{
+        component,
         ratatui::{
             crossterm::event::KeyEvent,
             layout::Rect,
+            prelude::{Color, Constraint, Direction, Layout},
             widgets::{Paragraph, Wrap},
-            Color, Constraint, Direction, Layout,
         },
         widgets::gridselector::{GridItem, GridSelector, GridSelectorState},
-        Action, Component, Frame,
+        Action, Component, ComponentAccessors, Frame,
     },
     tui::widgets::LabeledTextArea,
 };
 
-pub struct ScopeStep {
-    _theme: Theme,
-    sender: Option<tokio::sync::mpsc::UnboundedSender<String>>,
-    active: bool,
-    app_state: MutexAppState,
-    grid_state: Option<GridSelectorState>,
-    scope_input: Option<LabeledTextArea<'static>>,
+component! {
+    pub struct ScopeStep {
+        _theme: Theme,
+        app_state: MutexAppState,
+        grid_state: Option<GridSelectorState>,
+        scope_input: Option<LabeledTextArea<'static>>,
+    }
 }
 
 impl ScopeStep {
@@ -51,40 +51,17 @@ impl ScopeStep {
         };
 
         Self {
-            active: false,
             _theme: theme.clone(),
-            sender: None,
             app_state: app_state.clone(),
             grid_state,
             scope_input,
-        }
-    }
-
-    fn send(&self, action: &str) {
-        if let Some(sender) = self.sender.as_ref() {
-            let _ = sender.send(action.to_string());
+            ..Default::default()
         }
     }
 }
 
 impl Component for ScopeStep {
-    fn set_active(&mut self, active: bool) {
-        self.active = active;
-    }
-
-    fn is_active(&self) -> bool {
-        self.active
-    }
-
-    fn register_action_handler(
-        &mut self,
-        tx: tokio::sync::mpsc::UnboundedSender<String>,
-    ) -> Result<()> {
-        self.sender = Some(tx.clone());
-        Ok(())
-    }
-
-    fn receive_message(&mut self, message: String) -> Result<()> {
+    fn receive_message(&mut self, message: String) {
         if self.is_active() {
             // handle messages for the grid selector
             if let Some(grid_state) = self.grid_state.as_mut() {
@@ -124,19 +101,16 @@ impl Component for ScopeStep {
                 }
             }
         }
-
-        Ok(())
     }
 
-    fn handle_key_events(&mut self, key: KeyEvent) -> Result<Option<Action>> {
+    fn handle_key_events(&mut self, key: KeyEvent) -> Option<Action> {
         if let Some(scope_input) = self.scope_input.as_mut() {
             scope_input.input(key);
         }
-
-        Ok(None)
+        None
     }
 
-    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) -> Result<()> {
+    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         if let Some(scope_input) = self.scope_input.as_ref() {
             // render text area
 
@@ -168,7 +142,5 @@ impl Component for ScopeStep {
                 grid_state,
             );
         }
-
-        Ok(())
     }
 }

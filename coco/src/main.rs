@@ -2,14 +2,15 @@ mod cli;
 mod view;
 
 use {
+    cc_core::git,
     cli::{
         action::{get_action, Action},
         helpver::{help, version},
     },
     eyre::Result,
-    lool::{
-        components, s,
-        tui::{Action as TuiAction, App, Kb},
+    matetui::{
+        components, kb, ratatui::crossterm::style::Stylize, Action as MatetuiAction, App,
+        ComponentAccessors,
     },
     view::main_component::MainComponent,
 };
@@ -20,40 +21,47 @@ async fn main() -> Result<()> {
 
     match action {
         Action::Help | Action::Version => handle_cli_action(action)?,
-        _ => {
-            let main = MainComponent::new();
+        _ => match git::list_staged(Some("./")) {
+            Ok(staged) => {
+                if staged.is_empty() {
+                    println!(
+                        "{}",
+                        "Nothing to commit! Stage your changes first ('git add .')".red()
+                    );
+                    return Ok(());
+                }
 
-            let mut app = App::new(
-                Kb::from([
-                    ("<ctrl-c>", TuiAction::Quit.to_string()),
-                    // ("<q>", TuiAction::Quit.to_string()),
-                    // ("<esc>", TuiAction::Quit.to_string()),
-                    ("<up>", s!("kb:up")),
-                    ("<down>", s!("kb:down")),
-                    ("<left>", s!("kb:left")),
-                    ("<right>", s!("kb:right")),
-                    // ("<ctrl-left>", s!("kb:prev")),
-                    // ("<ctrl-right>", s!("builder:next")),
-                    // ("<i>", s!("kb:i")),
-                    // ("<backspace>", s!("kb:backspace")),
-                    ("<home>", s!("kb:home")),
-                    ("<end>", s!("kb:end")),
-                    ("<enter>", s!("kb:enter")),
-                    ("<pageup>", s!("kb:pageup")),
-                    ("<pagedown>", s!("kb:pagedown")),
-                    ("<space>", s!("kb:space")),
-                    // ("<shift-g>", s!("kb:shift-g")),
-                ]),
-                components![main],
-            )?;
+                let mut app = App::default()
+                    .with_frame_rate(32)
+                    .with_tick_rate(32)
+                    .with_keybindings(kb! {
+                        "<ctrl-c>" => MatetuiAction::Quit,
+                        "<up>" => "kb:up",
+                        "<down>" => "kb:down",
+                        "<left>" => "kb:left",
+                        "<right>" => "kb:right",
+                        "<home>" => "kb:home",
+                        "<end>" => "kb:end",
+                        "<enter>" => "kb:enter",
+                        "<pageup>" => "kb:pageup",
+                        "<pagedown>" => "kb:pagedown",
+                        "<space>" => "kb:space",
+                        "<f2>" => "kb:f2",
+                    })
+                    .with_components(components![MainComponent::new().as_active()]);
 
-            app.tick_rate = 32.into();
-            app.frame_rate = 32.into();
+                app.run().await?;
 
-            app.run().await?;
-
-            println!("\n ╭\n{{ }} Chau!\n");
-        }
+                // TODO: Show the final commit message before quitting
+                //       When we have succesfully committed the changes, we should show the final
+                //       commit information to the user before quitting the app.
+                //       To do this, we will need access to the `AppState` from the `main` function.
+                //       This means that we will need to actually create the `AppState` there and
+                //       pass it down to the `MainComponent`.
+                println!("\n ╭\n{{ }} Chau!\n");
+            }
+            Err(e) => println!("{}: {}", "Error listing staged files".red(), e),
+        },
     }
 
     Ok(())
@@ -64,7 +72,5 @@ fn handle_cli_action(action: Action) -> Result<()> {
         Action::Help => help(),
         Action::Version => version(),
         _ => Ok(()),
-        // Action::Default => seeker::collect(None),
-        // Action::DefaultWithDir(dir) => seeker::collect(Some(dir)),
     }
 }

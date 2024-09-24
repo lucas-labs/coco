@@ -3,42 +3,33 @@ use {
         config::Theme,
         state::{MutexAppState, StepStatus},
     },
-    eyre::Result,
-    lool::tui::{
+    matetui::{
+        component,
         ratatui::{
             layout::{Constraint, Direction, Flex, Layout, Rect},
+            prelude::{Color, Line, Stylize},
             widgets::Paragraph,
-            Color, Line, Stylize,
         },
         widgets::switch::Switch,
-        Component, Frame,
+        Component, ComponentAccessors, Frame,
     },
-    tokio::sync::mpsc::UnboundedSender,
 };
 
-pub struct BreakingChangeStep {
-    // children: Children,
-    _theme: Theme,
-    app_state: MutexAppState,
-    active: bool,
-    sender: Option<UnboundedSender<String>>,
-    breaking_change_choice: bool,
+component! {
+    pub struct BreakingChangeStep {
+        _theme: Theme,
+        app_state: MutexAppState,
+        breaking_change_choice: bool,
+    }
 }
 
 impl BreakingChangeStep {
     pub fn new(theme: Theme, app_state: MutexAppState) -> Self {
         Self {
-            _theme: theme.clone(),
-            app_state: app_state.clone(),
-            active: false,
-            sender: None,
             breaking_change_choice: false,
-        }
-    }
-
-    fn send(&self, action: &str) {
-        if let Some(sender) = self.sender.as_ref() {
-            let _ = sender.send(action.to_string());
+            app_state: app_state.clone(),
+            _theme: theme.clone(),
+            ..Default::default()
         }
     }
 
@@ -74,12 +65,7 @@ impl BreakingChangeStep {
 }
 
 impl Component for BreakingChangeStep {
-    fn register_action_handler(&mut self, tx: UnboundedSender<String>) -> Result<()> {
-        self.sender = Some(tx.clone());
-        Ok(())
-    }
-
-    fn receive_message(&mut self, message: String) -> Result<()> {
+    fn receive_message(&mut self, message: String) {
         if self.is_active() {
             match message.as_str() {
                 "kb:enter" | "kb:pagedown" => {
@@ -93,19 +79,9 @@ impl Component for BreakingChangeStep {
                 _ => {}
             }
         }
-
-        Ok(())
     }
 
-    fn set_active(&mut self, active: bool) {
-        self.active = active;
-    }
-
-    fn is_active(&self) -> bool {
-        self.active
-    }
-
-    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) -> Result<()> {
+    fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let [title_area, rest_area] = self.get_layout(area);
         let switch = Switch::with_status(self.breaking_change_choice)
             .with_color_on(Color::Green)
@@ -125,7 +101,5 @@ impl Component for BreakingChangeStep {
 
         f.render_widget(Paragraph::new(line).centered(), title_area);
         f.render_widget(switch, rest_area);
-
-        Ok(())
     }
 }

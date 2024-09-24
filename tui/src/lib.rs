@@ -1,10 +1,11 @@
 pub mod components {
-    mod header;
+    mod logo;
 
-    pub use header::LogoComponent;
+    pub use logo::LogoComponent;
 }
 
 pub mod widgets {
+    pub mod coco_help;
     mod coco_textarea;
     mod commit_msg;
     pub use {coco_textarea::LabeledTextArea, commit_msg::CommitMessage};
