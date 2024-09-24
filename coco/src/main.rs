@@ -2,7 +2,7 @@ mod cli;
 mod view;
 
 use {
-    cc_core::git,
+    cc_core::{git, state::default_app_state},
     cli::{
         action::{get_action, Action},
         helpver::{help, version},
@@ -37,6 +37,8 @@ async fn main() -> Result<()> {
                     return Ok(());
                 }
 
+                let state = default_app_state();
+
                 let mut app = App::default()
                     .with_frame_rate(32)
                     .with_tick_rate(1)
@@ -54,17 +56,12 @@ async fn main() -> Result<()> {
                         "<space>" => "kb:space",
                         "<f2>" => "kb:f2",
                     })
-                    .with_components(components![MainComponent::new().as_active()]);
+                    .with_components(components![MainComponent::new(state.clone()).as_active()]);
 
                 app.run().await?;
 
-                // TODO: Show the final commit message before quitting
-                //       When we have succesfully committed the changes, we should show the final
-                //       commit information to the user before quitting the app.
-                //       To do this, we will need access to the `AppState` from the `main` function.
-                //       This means that we will need to actually create the `AppState` there and
-                //       pass it down to the `MainComponent`.
-                println!("\n ╭\n{{ }} Chau!\n");
+                // show the commit before exiting
+                println!("{}", state.lock().unwrap().get_commit());
             }
             Err(e) => println!("{}: {}", "Error listing staged files".red(), e),
         },

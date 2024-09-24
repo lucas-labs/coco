@@ -1,4 +1,8 @@
-use unicode_width::UnicodeWidthStr;
+use {
+    matetui::ratatui::crossterm::style::Stylize,
+    std::fmt::{Display, Formatter},
+    unicode_width::UnicodeWidthStr,
+};
 
 #[derive(Debug, Clone)]
 pub struct CommitInfo {
@@ -109,7 +113,49 @@ impl ConventionalCommitMessage {
         commit
     }
 
+    pub fn raw_full_body(&self) -> String {
+        let mut result = "".to_string();
+
+        let raw_body = self.raw_body();
+        let raw_footer = self.raw_footer();
+
+        if !raw_body.is_empty() {
+            result.push_str(raw_body.as_str());
+        }
+
+        if !raw_footer.is_empty() {
+            if !raw_body.is_empty() {
+                result.push_str("\n\n");
+            }
+            result.push_str(raw_footer.as_str());
+        }
+
+        result
+    }
+
     pub fn size(&self) -> (u16, u16) {
         (self.width(), self.height())
+    }
+}
+
+impl Display for Commit {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        if let Some(info) = &self.info {
+            writeln!(f, "{} {}", "Commit".yellow().bold(), info.hash.as_str().yellow())?;
+            writeln!(f, "{} {} <{}>", "Author".bold(), info.author, info.author_email)?;
+            writeln!(f, "{}   {}", "Date".bold(), info.date)?;
+            writeln!(f)?;
+        }
+
+        if let Some(message) = &self.message {
+            write!(f, "{}", message.raw_title().magenta())?;
+
+            let body = message.raw_full_body();
+            if !body.is_empty() {
+                write!(f, "\n\n{}", body)?;
+            }
+        }
+
+        Ok(())
     }
 }
