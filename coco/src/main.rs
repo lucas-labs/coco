@@ -26,7 +26,6 @@ async fn main() -> Result<()> {
     let action = get_action()?;
 
     match action {
-        Action::Help | Action::Version => handle_cli_action(action)?,
         Action::Coco(stage_check) => match git::list_staged(Some("./")) {
             Ok(staged) => {
                 if staged.is_empty() && stage_check {
@@ -65,6 +64,8 @@ async fn main() -> Result<()> {
             }
             Err(e) => println!("{}: {}", "Error listing staged files".red(), e),
         },
+        // Handle other actions
+        a => handle_cli_action(a)?,
     }
 
     Ok(())

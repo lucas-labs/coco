@@ -45,7 +45,21 @@ theme:
   footer:fg: "#ffffff"
   footer:sec: "#000000"
 
+useEmoji: true
+askScope: false
+askBody: true
+askFooter: true
+askBreakingChange: true
+
 # scopes:
 #   - "source"
 #   - "meta"
 #   - "keyword"
+
+# types:
+#   - name: "feat"
+#     description: "A new feature"
+#     emoji: "✨"
+#   - name: "fix"
+#     description: "A bug fix"
+#     emoji: "🐛"

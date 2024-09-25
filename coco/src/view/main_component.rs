@@ -8,6 +8,13 @@ use {
     },
 };
 
+// TODO: implement debug-only fps counter
+//       Create a small component that will be displayed in the bottom right corner of the screen
+//       and that will show the current FPS of the app. This will be useful to debug performance
+//       issues and to see how the app is performing in different scenarios.
+//
+//       it should only be displayed when the app is compiled in debug mode
+
 /// The global application status, which will be used to display different UIs based on the status.
 #[derive(Clone, Default, PartialEq)]
 #[allow(dead_code)]
