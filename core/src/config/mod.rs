@@ -100,7 +100,7 @@ fn ctype(name: &str, emoji: &str, description: &str) -> CommitKind {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CocoConfig {
     pub theme: Theme,
     pub use_emoji: bool,
