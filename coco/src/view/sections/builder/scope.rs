@@ -47,7 +47,6 @@ impl ScopeStep {
                 header_bg: theme.get("scope:bg"),
                 header_fg: theme.get("scope:fg"),
                 header_sec: theme.get("scope:sec"),
-                ..Default::default()
             })
             .with_title("Scope")
             .with_subtitle("optional")
