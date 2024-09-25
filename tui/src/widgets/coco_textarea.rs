@@ -48,6 +48,7 @@ pub struct LabeledTextArea<'a> {
     title: String,
     subtitle: Option<String>,
     th: LabeledTextAreaTheme,
+    touched: bool,
     active: bool,
 }
 
@@ -75,6 +76,7 @@ impl<'a> LabeledTextArea<'a> {
             title: "Title".to_string(),
             subtitle: Some("Subtitle".to_string()),
             active: true,
+            touched: true, // if it starts active, it should be considered touched already
             th,
         }
     }
@@ -102,6 +104,9 @@ impl<'a> LabeledTextArea<'a> {
         self.active = active;
 
         if active {
+            // if active, set the textarea as touched too
+            self.touched = true;
+
             // enable cursor styles
             self.inner = self
                 .inner
@@ -134,6 +139,7 @@ impl<'a> LabeledTextArea<'a> {
     /// Set the active status of the text area.
     pub fn with_active(mut self, active: bool) -> Self {
         self.set_active(active);
+        self.touched = active;
         self
     }
 
@@ -203,6 +209,14 @@ impl<'a> LabeledTextArea<'a> {
     pub fn get_height(&self) -> u16 {
         const MIN_HEIGHT: usize = 1;
         cmp::max(self.lines().len(), MIN_HEIGHT) as u16 + 3
+    }
+
+    /// Get the touched status of the text area.
+    ///
+    /// A text area is considered touched if it has been active at least once.
+    /// This is useful to know if the user has interacted with the text area.
+    pub fn is_touched(&self) -> bool {
+        self.touched
     }
 }
 

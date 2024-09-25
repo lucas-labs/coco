@@ -1,5 +1,7 @@
-use cc_core::config::CocoConfig;
-use strum::{Display, EnumString};
+use {
+    cc_core::config::CocoConfig,
+    strum::{Display, EnumString},
+};
 
 #[derive(Default, EnumString, Display, PartialEq, Eq, Clone)]
 #[strum(serialize_all = "kebab-case")]
