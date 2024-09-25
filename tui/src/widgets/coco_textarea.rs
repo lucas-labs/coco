@@ -149,6 +149,11 @@ impl<'a> LabeledTextArea<'a> {
         self
     }
 
+    /// Set the maximum character count for the text area.
+    pub fn set_max_char_count(&mut self, max_char_count: usize) {
+        self.max_char_count = Some(max_char_count);
+    }
+
     /// Set the text area to be single line or not.
     pub fn with_single_line(mut self, single_line: bool) -> Self {
         self.single_line = single_line;

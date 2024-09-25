@@ -22,7 +22,7 @@ debug-assertions = false
 
 [workspace.dependencies]
 indoc = "2.0.5"
-matetui = "0.3.2"
+matetui = "0.3.3"
 eyre = { version = "0.6.12", default-features = false, features = [
     "auto-install",
 ] }
