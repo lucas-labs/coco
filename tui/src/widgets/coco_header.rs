@@ -6,18 +6,10 @@ use matetui::ratatui::{
     widgets::Paragraph,
 };
 
+#[derive(Default)]
 pub struct CocoHeader {
     style_left: Style,
     style_right: Style,
-}
-
-impl Default for CocoHeader {
-    fn default() -> Self {
-        Self {
-            style_left: Style::default(),
-            style_right: Style::default(),
-        }
-    }
 }
 
 impl CocoHeader {

@@ -19,22 +19,32 @@ impl HelpSection {
     }
 }
 
+// "; observation => "Press 'q' or 'Ctrl+c' to quit the application",
+// "Quit the application": ["q", "Ctrl+c"]; observation => "Press 'q' or 'Ctrl+c' to quit the application",
+// "Navigate up": ["k", "Up arrow"],
+// "Navigate down": ["j", "Down arrow"],
+// "Navigate left": ["h", "Left arrow"],
+
 impl Component for HelpSection {
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
-        // TODO: Real help
-        //       for now, the key glossary is just a placeholder with fictitious data; should be
-        //       replaced with actual key bindings once all of them are implemented
         let sections = help! {
-            "General" => {
-                "Quit the application": ["q", "Ctrl+c"]; observation => "Press 'q' or 'Ctrl+c' to quit the application",
-                "Navigate up": ["k", "Up arrow"],
-                "Navigate down": ["j", "Down arrow"],
-                "Navigate left": ["h", "Left arrow"],
+            "Help" => {
+                "Toggle this help on and off": ["F2"],
             }
-            "Switches" => {
-                "Toggle switch": ["space"],
-                "Switch to ON": ["Y"],
-                "Switch to OFF": ["N"],
+            "General" => {
+                "Exit": ["ctrl+c"],
+                "Go to the next step": ["pg-dn"],
+                "Go to the previous step": ["pg-up"],
+            }
+            "Text Areas" => {
+                "Submit": ["enter"],
+                "New Line / carriage return": ["shift+enter", "alt+enter", "ctrl+enter"]; observation => "depends on the terminal",
+            }
+            "Switch" => {
+                "Toggle the switch": ["space"],
+                "Set the switch to true": ["🠆"],
+                "Set the switch to false": ["🠄"],
+                "Accept": ["enter"],
             }
         };
 

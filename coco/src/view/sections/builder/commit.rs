@@ -69,7 +69,6 @@ impl CommitStep {
             header_bg: theme.get("summary:bg"),
             header_fg: theme.get("summary:fg"),
             header_sec: theme.get("summary:sec"),
-            ..Default::default()
         })
         .with_title("summary")
         .with_subtitle("* required")
@@ -88,10 +87,9 @@ impl CommitStep {
             header_bg: theme.get("body:bg"),
             header_fg: theme.get("body:fg"),
             header_sec: theme.get("body:sec"),
-            ..Default::default()
         })
         .with_title("body")
-        .with_subtitle("optional")
+        .with_subtitle("(optional) alt/shift/ctrl + enter for new line")
         .with_active(false);
 
         let footer_input = LabeledTextArea::new(LabeledTextAreaTheme {
@@ -101,10 +99,9 @@ impl CommitStep {
             header_bg: theme.get("footer:bg"),
             header_fg: theme.get("footer:fg"),
             header_sec: theme.get("footer:sec"),
-            ..Default::default()
         })
         .with_title("footer")
-        .with_subtitle("optional")
+        .with_subtitle("(optional) alt/shift/ctrl + enter for new line")
         .with_active(false);
 
         Self {
