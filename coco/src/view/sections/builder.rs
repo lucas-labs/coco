@@ -4,6 +4,7 @@ mod preview;
 mod scope;
 mod r#type;
 mod navigation {
+    pub mod commit_step;
     pub mod form_step;
 }
 

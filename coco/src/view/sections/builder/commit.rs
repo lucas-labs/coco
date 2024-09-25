@@ -1,5 +1,9 @@
 use {
-    cc_core::{config::Theme, state::MutexAppState},
+    super::navigation::commit_step::{InputType, NavigationDirection, NavigationResult},
+    cc_core::{
+        config::{CocoConfig, Theme},
+        state::MutexAppState,
+    },
     matetui::{
         component,
         ratatui::{
@@ -12,46 +16,10 @@ use {
     tui::widgets::{CocoHeader, LabeledTextArea, LabeledTextAreaTheme, StatusHint},
 };
 
-#[derive(PartialEq, Default)]
-enum InputType {
-    #[default]
-    Summary,
-    Body,
-    Footer,
-}
-
-enum NavigationResult {
-    PrevStep,
-    Input(InputType),
-    NextStep,
-}
-
-enum NavigationDirection {
-    Next,
-    Prev,
-}
-
-impl InputType {
-    fn next(&self) -> NavigationResult {
-        match self {
-            Self::Summary => NavigationResult::Input(Self::Body),
-            Self::Body => NavigationResult::Input(Self::Footer),
-            Self::Footer => NavigationResult::NextStep,
-        }
-    }
-
-    fn prev(&self) -> NavigationResult {
-        match self {
-            Self::Summary => NavigationResult::PrevStep,
-            Self::Body => NavigationResult::Input(Self::Summary),
-            Self::Footer => NavigationResult::Input(Self::Body),
-        }
-    }
-}
-
 component! {
     pub struct CommitStep {
         theme: Theme,
+        config: CocoConfig,
         app_state: MutexAppState,
         summary_input: LabeledTextArea<'static>,
         body_input: LabeledTextArea<'static>,
@@ -104,7 +72,10 @@ impl CommitStep {
         .with_subtitle("(optional) alt/shift/ctrl + enter for new line")
         .with_active(false);
 
+        let config = { app_state.lock().unwrap().config.clone() };
+
         Self {
+            config,
             active_input: InputType::Summary,
             theme: theme.clone(),
             app_state: app_state.clone(),
@@ -117,8 +88,8 @@ impl CommitStep {
 
     fn navigate(&mut self, direction: NavigationDirection) {
         let result = match direction {
-            NavigationDirection::Next => self.active_input.next(),
-            NavigationDirection::Prev => self.active_input.prev(),
+            NavigationDirection::Next => self.active_input.next(&self.config),
+            NavigationDirection::Prev => self.active_input.prev(&self.config),
         };
 
         match result {
@@ -227,16 +198,36 @@ impl Component for CommitStep {
         let header = CocoHeader::default()
             .left_fg(self.theme.get("logo:fg:1"))
             .right_fg(self.theme.get("logo:fg:2"));
-
         let title = StatusHint::new(kind, scope);
-
         f.render_widget(header, header_area);
         f.render_widget(title, title_area);
 
-        let (summary_area, body_area, footer_area) = self.get_textareas_layout(area);
+        // draw the text areas
 
+        let (summary_area, second_textarea, third_textarea) = self.get_textareas_layout(area);
+
+        // the summary is mandatory, so it's always rendered
         f.render_widget(&self.summary_input, summary_area);
-        f.render_widget(&self.body_input, body_area);
-        f.render_widget(&self.footer_input, footer_area);
+
+        // the body and footer inputs are only rendered if they are not disabled by the user
+        // in the config and if they have been active at least once (that's what the touched flag
+        // is for, and it means that the user has navigated to the input at least once)
+
+        let footer_area = {
+            if self.config.ask_body && self.body_input.is_touched() {
+                // if the body is enabled, render it and set the footer to be rendered in the
+                // third slot of the layout (provided it's enabled)
+                f.render_widget(&self.body_input, second_textarea);
+                third_textarea
+            } else {
+                // if body is disabled, render the footer in the second slot (provided it's enabled)
+                second_textarea
+            }
+        };
+
+        // render the footer if it's enabled and has been touched
+        if self.config.ask_footer && self.footer_input.is_touched() {
+            f.render_widget(&self.footer_input, footer_area);
+        }
     }
 }
