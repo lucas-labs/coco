@@ -28,8 +28,30 @@ component! {
     }
 }
 
+/// Calculate the maximum character count for the summary input, based on the current configuration
+/// and the kind and scope of the commit.
+fn calculate_summary_max_char_count(app_state: &MutexAppState) -> usize {
+    let state = { app_state.lock().unwrap() };
+    let scope = state.get_scope().unwrap_or_default();
+    let kind = state.get_kind();
+    let use_emoji = state.config.use_emoji;
+
+    if let Some(kind) = kind {
+        // the commit message has a format:
+        // <type>(<scope>): {emoji} <summary>
+        let scope_len = if scope.len() > 0 { scope.len() + 2 } else { 0 };
+        let type_len = kind.name.len();
+        let emoji_len = if use_emoji { 3 } else { 0 }; // emoji + 2 spaces
+        state.config.max_summary_length - (type_len + scope_len + 1 + emoji_len)
+    } else {
+        state.config.max_summary_length
+    }
+}
+
 impl CommitStep {
     pub fn new(theme: Theme, app_state: MutexAppState) -> Self {
+        let max_summary_char_count = calculate_summary_max_char_count(&app_state);
+
         let summary_input = LabeledTextArea::new(LabeledTextAreaTheme {
             main_bg: theme.get("textarea:bg"),
             main_fg: theme.get("textarea:fg"),
@@ -41,11 +63,7 @@ impl CommitStep {
         .with_title("summary")
         .with_subtitle("* required")
         .with_single_line(true)
-        // TODO: Calculate real max char count
-        //       Based on the type and scope, we can know how many characters are available
-        //       for the summary. For now, we just use 72, but 72 should be the max including
-        //       the type and scope.
-        .with_max_char_count(72)
+        .with_max_char_count(max_summary_char_count)
         .with_validations([required_validator]);
 
         let body_input = LabeledTextArea::new(LabeledTextAreaTheme {
@@ -184,6 +202,14 @@ impl Component for CommitStep {
         };
 
         None
+    }
+
+    fn on_active_changed(&mut self, active: bool) {
+        if active {
+            // calculate the max char count for the summary input, sin ce it might have changed
+            let max_summary_char_count = calculate_summary_max_char_count(&self.app_state);
+            self.summary_input.set_max_char_count(max_summary_char_count);
+        }
     }
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {

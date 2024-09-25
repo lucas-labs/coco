@@ -103,6 +103,7 @@ fn ctype(name: &str, emoji: &str, description: &str) -> CommitKind {
 #[derive(Debug, Clone)]
 pub struct CocoConfig {
     pub theme: Theme,
+    pub max_summary_length: usize,
     pub use_emoji: bool,
     pub ask_scope: bool,
     pub ask_body: bool,
@@ -115,6 +116,8 @@ pub struct CocoConfig {
 #[derive(Debug, Deserialize, Default)]
 struct PartialConfig {
     pub theme: Option<Theme>,
+    #[serde(alias = "maxSummaryLength")]
+    pub max_summary_length: Option<usize>,
     #[serde(alias = "useEmoji")]
     pub use_emoji: Option<bool>,
     #[serde(alias = "askScope")]
@@ -135,6 +138,7 @@ impl Default for CocoConfig {
     fn default() -> Self {
         Self {
             theme: Theme::default(),
+            max_summary_length: 72,
             use_emoji: true,
             ask_scope: true,
             ask_body: true,
@@ -201,6 +205,8 @@ impl CocoConfig {
 
         if let Some(home) = home {
             config.theme = home.theme.map_or(config.theme.clone(), |t| config.theme.merge(t));
+            config.max_summary_length =
+                home.max_summary_length.unwrap_or(config.max_summary_length);
             config.use_emoji = home.use_emoji.unwrap_or(config.use_emoji);
             config.ask_scope = home.ask_scope.unwrap_or(config.ask_scope);
             config.ask_body = home.ask_body.unwrap_or(config.ask_body);
@@ -213,6 +219,8 @@ impl CocoConfig {
 
         if let Some(current) = current {
             config.theme = current.theme.map_or(config.theme.clone(), |t| config.theme.merge(t));
+            config.max_summary_length =
+                current.max_summary_length.unwrap_or(config.max_summary_length);
             config.use_emoji = current.use_emoji.unwrap_or(config.use_emoji);
             config.ask_scope = current.ask_scope.unwrap_or(config.ask_scope);
             config.ask_body = current.ask_body.unwrap_or(config.ask_body);

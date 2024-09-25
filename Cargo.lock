@@ -458,9 +458,9 @@ dependencies = [
 
 [[package]]
 name = "matetui"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99292663a85b42b12c9612d294be00fe36434a20e52c151840b9893b9f8849a0"
+checksum = "458c558771bf14e04efae8954f990b163f3873872e6929d160a69dfce19ef38d"
 dependencies = [
  "crossterm",
  "downcast-rs",

@@ -45,8 +45,9 @@ theme:
   footer:fg: "#ffffff"
   footer:sec: "#000000"
 
+maxSummaryLength: 72
 useEmoji: true
-askScope: false
+askScope: true
 askBody: true
 askFooter: true
 askBreakingChange: true
