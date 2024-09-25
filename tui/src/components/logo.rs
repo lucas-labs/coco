@@ -5,7 +5,7 @@ use {
         component,
         ratatui::{
             layout::Rect,
-            prelude::{Alignment, Color, Modifier, Style},
+            prelude::{Alignment, Modifier, Style},
         },
         Component, Frame,
     },
@@ -22,7 +22,7 @@ fn id() -> i32 {
 
 component! {
     pub struct LogoComponent {
-        _theme: Theme,
+        theme: Theme,
         blink: bool,
         blink_state: bool,
         cancel_blink: CancellationToken,
@@ -31,9 +31,9 @@ component! {
 }
 
 impl LogoComponent {
-    pub fn new(_theme: Theme) -> Self {
+    pub fn new(theme: Theme) -> Self {
         Self {
-            _theme,
+            theme,
             blink: false,
             blink_state: true,
             is_active: true,
@@ -72,21 +72,23 @@ impl LogoComponent {
     }
 
     fn colors(&self) -> (Style, Style) {
-        // TODO: use theme colors instead of hardcoded colors
         if self.blink {
             if self.blink_state {
                 (
-                    Style::default().fg(Color::Blue).add_modifier(Modifier::DIM),
-                    Style::default().fg(Color::Magenta),
+                    Style::default().fg(self.theme.get("logo:fg:1")).add_modifier(Modifier::DIM),
+                    Style::default().fg(self.theme.get("logo:fg:2")),
                 )
             } else {
                 (
-                    Style::default().fg(Color::Blue),
-                    Style::default().fg(Color::Magenta).add_modifier(Modifier::DIM),
+                    Style::default().fg(self.theme.get("logo:fg:1")),
+                    Style::default().fg(self.theme.get("logo:fg:2")).add_modifier(Modifier::DIM),
                 )
             }
         } else {
-            (Style::default().fg(Color::Blue), Style::default().fg(Color::Magenta))
+            (
+                Style::default().fg(self.theme.get("logo:fg:1")),
+                Style::default().fg(self.theme.get("logo:fg:2")),
+            )
         }
     }
 }

@@ -14,8 +14,8 @@ pub struct CocoHeader {
 impl Default for CocoHeader {
     fn default() -> Self {
         Self {
-            style_left: Style::default().fg(Color::Reset),
-            style_right: Style::default().fg(Color::Reset),
+            style_left: Style::default(),
+            style_right: Style::default(),
         }
     }
 }

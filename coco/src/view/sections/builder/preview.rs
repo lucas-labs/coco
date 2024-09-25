@@ -7,7 +7,7 @@ use {
         component,
         ratatui::{
             layout::{Alignment, Constraint, Direction, Flex, Layout, Rect},
-            prelude::{Color, Line, Span, Style},
+            prelude::{Line, Span, Style},
             style::Stylize,
             widgets::{Block, Padding, Paragraph},
         },
@@ -18,7 +18,7 @@ use {
 
 component! {
     pub struct PreviewStep {
-        _theme: Theme,
+        theme: Theme,
         app_state: MutexAppState,
         decision: bool,
     }
@@ -27,7 +27,7 @@ component! {
 impl PreviewStep {
     pub fn new(theme: Theme, app_state: MutexAppState) -> Self {
         Self {
-            _theme: theme.clone(),
+            theme: theme.clone(),
             app_state: app_state.clone(),
             decision: true,
             ..Default::default()
@@ -91,7 +91,9 @@ impl Component for PreviewStep {
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let [header_area, area] = self.layout(area);
-        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let header = CocoHeader::default()
+            .left_fg(self.theme.get("logo:fg:1"))
+            .right_fg(self.theme.get("logo:fg:2"));
 
         let commit = { self.app_state.lock().unwrap().get_commit_message() };
 
@@ -102,15 +104,15 @@ impl Component for PreviewStep {
             .alignment(Alignment::Center);
 
         let yes_style = if self.decision {
-            Style::default().fg(Color::Green).bold()
+            Style::default().fg(self.theme.get("yes")).bold()
         } else {
-            Style::default().fg(Color::Reset)
+            Style::default()
         };
 
         let no_style = if !self.decision {
-            Style::default().fg(Color::Red).bold()
+            Style::default().fg(self.theme.get("no")).bold()
         } else {
-            Style::default().fg(Color::Reset)
+            Style::default()
         };
 
         let decision = Paragraph::new(Line::from(vec![
