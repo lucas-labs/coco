@@ -13,7 +13,10 @@ pub mod widgets {
     mod status_hint;
 
     pub use {
-        coco_header::CocoHeader, coco_logo::CocoLogo, coco_textarea::LabeledTextArea,
-        commit_msg::CommitMessage, status_hint::StatusHint,
+        coco_header::CocoHeader,
+        coco_logo::CocoLogo,
+        coco_textarea::{LabeledTextArea, LabeledTextAreaTheme},
+        commit_msg::CommitMessage,
+        status_hint::StatusHint,
     };
 }

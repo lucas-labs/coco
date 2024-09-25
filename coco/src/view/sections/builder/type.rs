@@ -7,7 +7,7 @@ use {
         component,
         ratatui::{
             layout::Rect,
-            prelude::{Color, Constraint, Layout},
+            prelude::{Constraint, Layout},
             style::Stylize,
             text::Line,
             widgets::Paragraph,
@@ -20,7 +20,7 @@ use {
 
 component!(
     pub struct TypeStep {
-        _theme: Theme,
+        theme: Theme,
         app_state: MutexAppState,
         grid_state: Option<GridSelectorState>,
     }
@@ -36,7 +36,7 @@ impl TypeStep {
         Self {
             app_state: app_state.clone(),
             grid_state: Some(state),
-            _theme: theme.clone(),
+            theme: theme.clone(),
             ..Default::default()
         }
     }
@@ -93,7 +93,10 @@ impl Component for TypeStep {
         let [logo_area, help_area, title_area, rest_area] = self.get_layout(area);
 
         // #region Header
-        let logo = CocoLogo::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let logo = CocoLogo::default()
+            .left_fg(self.theme.get("logo:fg:1"))
+            .right_fg(self.theme.get("logo:fg:2"));
+
         f.render_widget(logo, logo_area);
 
         let line = Line::from(vec!["Press".into(), " F2 ".bold(), "for help".into()]);
@@ -111,8 +114,8 @@ impl Component for TypeStep {
         if let Some(ref mut grid_state) = self.grid_state {
             f.render_stateful_widget(
                 GridSelector::default()
-                    .with_selected_color(Color::Green)
-                    .with_hovered_color(Color::Blue),
+                    .with_selected_color(self.theme.get("grid:selected"))
+                    .with_hovered_color(self.theme.get("grid:hovered")),
                 rest_area,
                 grid_state,
             );

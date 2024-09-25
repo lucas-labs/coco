@@ -1,16 +1,49 @@
 theme:
-  primary: '#dcff3f'
-  primary-fg: '#000000'
+  # logo
+  logo:fg:1: blue
+  logo:fg:2: light-magenta
 
-  # textareas
-  'textarea:bg': '#050f21'
-  'textarea:fg': '#ffffff'
-  'textarea:sel': '#232a38'
+  # header
+  header:type: yellow
+  header:scope: blue
+
+  # grid-selector
+  grid:selected: green
+  grid:hovered: blue
+
+  # switch
+  switch:on: "#00c980"
+  switch:off: black
+  switch:switch: white
+
+  # Yes/No
+  "yes": "#00c980"
+  "no": red
+
+  # textarea main
+  textarea:bg: "#050f21"
+  textarea:fg: "#ffffff"
+  textarea:sel: "#232a38"
+
+  # scope-textarea
+  scope:bg: "#125acc"
+  scope:fg: "#ffffff"
+  scope:sec: "#000000"
+
+  # summary-textarea
+  summary:bg: "#6a2eab"
+  summary:fg: "#ffffff"
+  summary:sec: "#000000"
+
+  # body-textarea
+  body:bg: "#f24e50"
+  body:fg: "#ffffff"
+  body:sec: "#000000"
   
-  # Scope
-  'scope:bg': '#125acc'
-  'scope:fg': '#ffffff'
-  'scope:sec': '#000000'
+  # footer-textarea
+  footer:bg: "#db279f"
+  footer:fg: "#ffffff"
+  footer:sec: "#000000"
 
 # scopes:
 #   - "source"

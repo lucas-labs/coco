@@ -15,8 +15,8 @@ pub struct CocoLogo {
 impl Default for CocoLogo {
     fn default() -> Self {
         Self {
-            style_left: Style::default().fg(Color::Reset),
-            style_right: Style::default().fg(Color::Reset),
+            style_left: Style::default(),
+            style_right: Style::default(),
             align: Alignment::Center,
         }
     }

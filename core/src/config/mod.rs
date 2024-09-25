@@ -25,23 +25,42 @@ pub struct Theme(#[serde(deserialize_with = "deserialize_color")] HashMap<String
 impl Default for Theme {
     fn default() -> Self {
         Theme(HashMap::from([
-            (s!("primary"), color("#dcff3f")),
-            (s!("primary-fg"), color("#000000")),
-            // # textareas
-            // 'textarea:bg': '#050f21'
-            // 'textarea:fg': '#ffffff'
-            // 'textarea:sel': '#232a38'
-
-            // # Scope
-            // 'scope:bg': '#125acc'
-            // 'scope:fg': '#ffffff'
-            // 'scope:sec': '#000000'
+            // logo
+            (s!("logo:fg:1"), Color::Blue),
+            (s!("logo:fg:2"), Color::LightMagenta),
+            // header
+            (s!("header:type"), Color::Yellow),
+            (s!("header:scope"), Color::Blue),
+            // grid-selector
+            (s!("grid:selected"), Color::Green),
+            (s!("grid:hovered"), Color::Blue),
+            // switch
+            (s!("switch:on"), color("#00c980")),
+            (s!("switch:off"), Color::Black),
+            (s!("switch:switch"), Color::White),
+            // Yes/No
+            (s!("yes"), color("#00c980")),
+            (s!("no"), Color::Red),
+            // textarea main
             (s!("textarea:bg"), color("#050f21")),
             (s!("textarea:fg"), color("#ffffff")),
             (s!("textarea:sel"), color("#232a38")),
+            // scope-textarea
             (s!("scope:bg"), color("#125acc")),
             (s!("scope:fg"), color("#ffffff")),
             (s!("scope:sec"), color("#000000")),
+            // summary-textarea
+            (s!("summary:bg"), color("#6a2eab")),
+            (s!("summary:fg"), color("#ffffff")),
+            (s!("summary:sec"), color("#000000")),
+            // body-textarea
+            (s!("body:bg"), color("#f24e50")),
+            (s!("body:fg"), color("#ffffff")),
+            (s!("body:sec"), color("#000000")),
+            // footer-textarea
+            (s!("footer:bg"), color("#db279f")),
+            (s!("footer:fg"), color("#ffffff")),
+            (s!("footer:sec"), color("#000000")),
         ]))
     }
 }

@@ -8,18 +8,18 @@ use {
         ratatui::{
             crossterm::event::KeyEvent,
             layout::Rect,
-            prelude::{Color, Constraint, Direction, Layout},
+            prelude::{Constraint, Direction, Layout},
             widgets::{Paragraph, Wrap},
         },
         widgets::gridselector::{GridItem, GridSelector, GridSelectorState},
         Action, Component, ComponentAccessors, Frame,
     },
-    tui::widgets::{CocoHeader, LabeledTextArea, StatusHint},
+    tui::widgets::{CocoHeader, LabeledTextArea, LabeledTextAreaTheme, StatusHint},
 };
 
 component! {
     pub struct ScopeStep {
-        _theme: Theme,
+        theme: Theme,
         app_state: MutexAppState,
         grid_state: Option<GridSelectorState>,
         scope_input: Option<LabeledTextArea<'static>>,
@@ -40,18 +40,26 @@ impl ScopeStep {
         };
 
         let scope_input = if grid_state.is_none() {
-            let input = LabeledTextArea::default()
-                .with_title("Scope")
-                .with_subtitle("optional")
-                .with_single_line(true)
-                .with_max_char_count(20);
+            let input = LabeledTextArea::new(LabeledTextAreaTheme {
+                main_bg: theme.get("textarea:bg"),
+                main_fg: theme.get("textarea:fg"),
+                main_sel: theme.get("textarea:sel"),
+                header_bg: theme.get("scope:bg"),
+                header_fg: theme.get("scope:fg"),
+                header_sec: theme.get("scope:sec"),
+                ..Default::default()
+            })
+            .with_title("Scope")
+            .with_subtitle("optional")
+            .with_single_line(true)
+            .with_max_char_count(20);
             Some(input)
         } else {
             None
         };
 
         Self {
-            _theme: theme.clone(),
+            theme: theme.clone(),
             app_state: app_state.clone(),
             grid_state,
             scope_input,
@@ -124,8 +132,12 @@ impl Component for ScopeStep {
         };
 
         // draw the header and title
-        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let header = CocoHeader::default()
+            .left_fg(self.theme.get("logo:fg:1"))
+            .right_fg(self.theme.get("logo:fg:2"));
+
         let title = StatusHint::new(kind, scope);
+
         f.render_widget(header, header_area);
         f.render_widget(title, title_area);
 
@@ -151,8 +163,8 @@ impl Component for ScopeStep {
             f.render_widget(desc, description_area);
             f.render_stateful_widget(
                 GridSelector::default()
-                    .with_selected_color(Color::Green)
-                    .with_hovered_color(Color::Blue),
+                    .with_selected_color(self.theme.get("grid:selected"))
+                    .with_hovered_color(self.theme.get("grid:hovered")),
                 rest,
                 grid_state,
             );

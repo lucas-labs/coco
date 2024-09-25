@@ -7,7 +7,7 @@ use {
         component,
         ratatui::{
             layout::{Constraint, Direction, Flex, Layout, Rect},
-            prelude::{Color, Line, Stylize},
+            prelude::{Line, Stylize},
             widgets::Paragraph,
         },
         widgets::switch::Switch,
@@ -18,7 +18,7 @@ use {
 
 component! {
     pub struct BreakingChangeStep {
-        _theme: Theme,
+        theme: Theme,
         app_state: MutexAppState,
         breaking_change_choice: bool,
     }
@@ -29,7 +29,7 @@ impl BreakingChangeStep {
         Self {
             breaking_change_choice: false,
             app_state: app_state.clone(),
-            _theme: theme.clone(),
+            theme: theme.clone(),
             ..Default::default()
         }
     }
@@ -89,19 +89,21 @@ impl Component for BreakingChangeStep {
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let [header_area, area] = self.layout(area);
-        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let header = CocoHeader::default()
+            .left_fg(self.theme.get("logo:fg:1"))
+            .right_fg(self.theme.get("logo:fg:2"));
 
         let [title_area, rest_area] = self.get_body_layout(area);
         let switch = Switch::with_status(self.breaking_change_choice)
-            .with_color_on(Color::Green)
-            .with_color_switch(Color::White)
-            .with_color_off(Color::Black);
+            .with_color_on(self.theme.get("switch:on"))
+            .with_color_switch(self.theme.get("switch:switch"))
+            .with_color_off(self.theme.get("switch:off"));
 
         let line = Line::from(vec![
             "Does this commit introduces a breaking change? (".into(),
             // Yes / No depending on the choice
             if self.breaking_change_choice {
-                "Yes".bold().fg(Color::Green)
+                "Yes".bold().fg(self.theme.get("yes"))
             } else {
                 "No".bold().dim()
             },

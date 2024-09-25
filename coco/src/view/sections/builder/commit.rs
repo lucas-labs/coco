@@ -5,12 +5,11 @@ use {
         ratatui::{
             crossterm::event::KeyEvent,
             layout::{Constraint, Direction, Layout, Rect},
-            style::Color,
         },
         widgets::textarea::{validators::required_validator, Input},
         Action, Component, ComponentAccessors, Frame,
     },
-    tui::widgets::{CocoHeader, LabeledTextArea, StatusHint},
+    tui::widgets::{CocoHeader, LabeledTextArea, LabeledTextAreaTheme, StatusHint},
 };
 
 #[derive(PartialEq, Default)]
@@ -52,7 +51,7 @@ impl InputType {
 
 component! {
     pub struct CommitStep {
-        _theme: Theme,
+        theme: Theme,
         app_state: MutexAppState,
         summary_input: LabeledTextArea<'static>,
         body_input: LabeledTextArea<'static>,
@@ -63,24 +62,54 @@ component! {
 
 impl CommitStep {
     pub fn new(theme: Theme, app_state: MutexAppState) -> Self {
-        let summary_input = LabeledTextArea::default()
-            .with_title("summary")
-            .with_subtitle("* required")
-            .with_single_line(true)
-            .with_max_char_count(72)
-            .with_validations([required_validator]);
-        let body_input = LabeledTextArea::default()
-            .with_title("body")
-            .with_subtitle("optional")
-            .with_active(false);
-        let footer_input = LabeledTextArea::default()
-            .with_title("footer")
-            .with_subtitle("optional")
-            .with_active(false);
+        let summary_input = LabeledTextArea::new(LabeledTextAreaTheme {
+            main_bg: theme.get("textarea:bg"),
+            main_fg: theme.get("textarea:fg"),
+            main_sel: theme.get("textarea:sel"),
+            header_bg: theme.get("summary:bg"),
+            header_fg: theme.get("summary:fg"),
+            header_sec: theme.get("summary:sec"),
+            ..Default::default()
+        })
+        .with_title("summary")
+        .with_subtitle("* required")
+        .with_single_line(true)
+        // TODO: Calculate real max char count
+        //       Based on the type and scope, we can know how many characters are available
+        //       for the summary. For now, we just use 72, but 72 should be the max including
+        //       the type and scope.
+        .with_max_char_count(72)
+        .with_validations([required_validator]);
+
+        let body_input = LabeledTextArea::new(LabeledTextAreaTheme {
+            main_bg: theme.get("textarea:bg"),
+            main_fg: theme.get("textarea:fg"),
+            main_sel: theme.get("textarea:sel"),
+            header_bg: theme.get("body:bg"),
+            header_fg: theme.get("body:fg"),
+            header_sec: theme.get("body:sec"),
+            ..Default::default()
+        })
+        .with_title("body")
+        .with_subtitle("optional")
+        .with_active(false);
+
+        let footer_input = LabeledTextArea::new(LabeledTextAreaTheme {
+            main_bg: theme.get("textarea:bg"),
+            main_fg: theme.get("textarea:fg"),
+            main_sel: theme.get("textarea:sel"),
+            header_bg: theme.get("footer:bg"),
+            header_fg: theme.get("footer:fg"),
+            header_sec: theme.get("footer:sec"),
+            ..Default::default()
+        })
+        .with_title("footer")
+        .with_subtitle("optional")
+        .with_active(false);
 
         Self {
             active_input: InputType::Summary,
-            _theme: theme.clone(),
+            theme: theme.clone(),
             app_state: app_state.clone(),
             summary_input,
             body_input,
@@ -198,8 +227,12 @@ impl Component for CommitStep {
         };
 
         // draw the header and title
-        let header = CocoHeader::default().left_fg(Color::Blue).right_fg(Color::Magenta);
+        let header = CocoHeader::default()
+            .left_fg(self.theme.get("logo:fg:1"))
+            .right_fg(self.theme.get("logo:fg:2"));
+
         let title = StatusHint::new(kind, scope);
+
         f.render_widget(header, header_area);
         f.render_widget(title, title_area);
 

@@ -13,14 +13,14 @@ use {
     std::cmp,
 };
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct LabeledTextAreaTheme {
-    header_bg: Color,
-    header_fg: Color,
-    header_sec: Color,
-    main_bg: Color,
-    main_fg: Color,
-    main_sel: Color,
+    pub header_bg: Color,
+    pub header_fg: Color,
+    pub header_sec: Color,
+    pub main_bg: Color,
+    pub main_fg: Color,
+    pub main_sel: Color,
 }
 
 impl Default for LabeledTextAreaTheme {
@@ -117,12 +117,6 @@ impl<'a> LabeledTextArea<'a> {
     /// Get the active status of the text area.
     pub fn is_active(&self) -> bool {
         self.active
-    }
-
-    /// Set the [LabeledTextAreaTheme] for the text area.
-    pub fn with_theme(mut self, theme: LabeledTextAreaTheme) -> Self {
-        self.th = theme;
-        self
     }
 
     /// Set the title of the text area.
