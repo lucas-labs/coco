@@ -1,6 +1,7 @@
 mod cli;
 mod view;
 
+use cc_core::{init_i18n, setup_locale};
 use {
     cc_core::{git, state::default_app_state},
     cli::{
@@ -15,14 +16,11 @@ use {
     view::main_component::MainComponent,
 };
 
-// TODO: i18n
-//       implement internationalization for all the literal strings in the app.
-//
-//       > Check the [rust-i18n](https://github.com/longbridgeapp/rust-i18n) crate for a possible
-//         half baked solution.
+init_i18n!();
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    setup_locale();
     let action = get_action()?;
 
     match action {

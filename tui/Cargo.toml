@@ -15,7 +15,15 @@ lool = { workspace = true, features = ["macros"] }
 eyre = { workspace = true }
 tokio = { workspace = true }
 matetui = { workspace = true }
+rust-i18n = { workspace = true }
 cc-core = { path = "../core" }
 unicode-width = "0.2.0"
 tokio-util = "0.7.12"
 
+[package.metadata.i18n]
+available-locales = ["en", "es"]
+default-locale = "en"
+load-path = "../locales"
+minify-key = true
+minify-key-len = 4
+minify-key-thresh = 4

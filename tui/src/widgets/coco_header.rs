@@ -1,3 +1,4 @@
+use cc_core::t;
 use matetui::ratatui::{
     layout::{Alignment, Constraint, Layout},
     prelude::{Buffer, Line, Rect, Span, Widget},
@@ -57,9 +58,9 @@ impl Widget for CocoHeader {
         ])));
 
         let help_message_par = Paragraph::new(Text::from(Line::from(vec![
-            "Press".into(),
+            t!("Press").into(),
             " F2 ".bold(),
-            "for help".into(),
+            t!("for help").into(),
         ])))
         .alignment(Alignment::Right);
 

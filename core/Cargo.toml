@@ -16,10 +16,19 @@ eyre = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true }
 matetui = { workspace = true }
-
-serde_yaml = "0.9.33"
+rust-i18n = { workspace = true }
 dirs = "5.0.1"
+serde_yaml = "0.9.33"
 unicode-width = "0.2.0"
+sys-locale = "0.3.1"
 
 [dev-dependencies]
 tempfile = "3.12"
+
+[package.metadata.i18n]
+available-locales = ["en", "es"]
+default-locale = "en"
+load-path = "../locales"
+minify-key = true
+minify-key-len = 4
+minify-key-thresh = 4

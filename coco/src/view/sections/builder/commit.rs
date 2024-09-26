@@ -3,6 +3,7 @@ use {
     cc_core::{
         config::{CocoConfig, Theme},
         state::MutexAppState,
+        t,
     },
     matetui::{
         component,
@@ -61,10 +62,13 @@ impl CommitStep {
             header_sec: theme.get("summary:sec"),
         })
         .with_title("summary")
-        .with_subtitle("* required")
+        .with_subtitle(format!("* {}", t!("required")))
         .with_single_line(true)
         .with_max_char_count(max_summary_char_count)
         .with_validations([required_validator]);
+
+        let optional_subtitle =
+            format!("({}) alt/shift/ctrl + enter {}", t!("optional"), t!("for new line"));
 
         let body_input = LabeledTextArea::new(LabeledTextAreaTheme {
             main_bg: theme.get("textarea:bg"),
@@ -75,7 +79,7 @@ impl CommitStep {
             header_sec: theme.get("body:sec"),
         })
         .with_title("body")
-        .with_subtitle("(optional) alt/shift/ctrl + enter for new line")
+        .with_subtitle(&optional_subtitle)
         .with_active(false);
 
         let footer_input = LabeledTextArea::new(LabeledTextAreaTheme {
@@ -87,7 +91,7 @@ impl CommitStep {
             header_sec: theme.get("footer:sec"),
         })
         .with_title("footer")
-        .with_subtitle("(optional) alt/shift/ctrl + enter for new line")
+        .with_subtitle(&optional_subtitle)
         .with_active(false);
 
         let config = { app_state.lock().unwrap().config.clone() };
@@ -135,7 +139,7 @@ impl CommitStep {
     }
 
     fn update_inputs_active_states(&mut self, maybe_next_active: Option<InputType>) {
-        // onlyif the active input is valid
+        // only if the active input is valid
         if !self.is_active_input_valid() {
             return;
         }

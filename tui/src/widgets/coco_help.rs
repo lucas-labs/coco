@@ -1,4 +1,5 @@
 use {
+    cc_core::t,
     matetui::ratatui::{
         layout::{Constraint, Direction, Flex, Layout},
         prelude::{Buffer, Line, Rect, Span, Stylize, Widget},
@@ -110,7 +111,8 @@ impl Widget for CocoHelp {
                 // Render the key and observation on the right
                 let mut keys = item.keys.iter().fold(Vec::new(), |mut acc, key| {
                     if !acc.is_empty() {
-                        acc.push(" or ".dim());
+                        let or: Span = t!("or").into();
+                        acc.extend(vec![" ".into(), or.dim(), " ".into()]);
                     }
                     acc.push(key.into());
                     acc
@@ -143,10 +145,11 @@ impl Widget for CocoHelp {
 /// repeatedly.
 #[macro_export]
 macro_rules! help {
+    // Handle the `=>` notation
     (
-        $( $section:tt => {
+        $( $section:expr => {
             $(
-                $desc:tt : [ $( $key:expr ),+ ] $( ; observation => $obs:expr )? ,
+                $desc:expr => [ $( $key:expr ),+ ] $( ; observation => $obs:expr )? ,
             )*
         } )*
     ) => {

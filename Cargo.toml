@@ -23,6 +23,7 @@ debug-assertions = false
 [workspace.dependencies]
 indoc = "2.0.5"
 matetui = "0.3.3"
+rust-i18n = "3.1.2"
 eyre = { version = "0.6.12", default-features = false, features = [
     "auto-install",
 ] }
@@ -38,3 +39,11 @@ tokio = { version = "1.40.0", features = [
     "sync",
     "time",
 ] }
+
+[i18n]
+available-locales = ["en", "es"]
+default-locale = "en"
+load-path = "locales"
+minify-key = true
+minify-key-len = 4
+minify-key-thresh = 4
