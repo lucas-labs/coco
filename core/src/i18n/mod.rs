@@ -16,6 +16,13 @@ pub fn setup_locale() {
 
 #[inline]
 pub fn get_locale() -> String {
+    #[cfg(debug_assertions)]
+    {
+        if let Ok(locale) = std::env::var("COCO_LOCALE") {
+            return locale;
+        }
+    }
+
     let locale = sys_get_locale().unwrap_or_else(|| "en".to_string()).replace("_", "-");
     locale.split('-').next().unwrap_or("en").to_string()
 }

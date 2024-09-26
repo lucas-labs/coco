@@ -57,6 +57,10 @@ async fn main() -> Result<()> {
 
                 app.run().await?;
 
+                // TODO: don't show the commit if the user quitted before actually committing
+                //       right now, we show the commit message even if the user quits
+                //       before actually committing, which could be confusing and misleading
+                //       making the user think that the commit was actually performed.
                 // show the commit before exiting
                 println!("{}", state.lock().unwrap().get_commit());
             }
