@@ -1,6 +1,10 @@
 use {
-    matetui::ratatui::crossterm::style::Stylize,
-    std::fmt::{Display, Formatter},
+    matetui::ratatui::text::{Line, Text},
+    rust_i18n::t,
+    std::{
+        borrow::Cow,
+        fmt::{Display, Formatter},
+    },
     unicode_width::UnicodeWidthStr,
 };
 
@@ -140,6 +144,8 @@ impl ConventionalCommitMessage {
 
 impl Display for Commit {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        use matetui::ratatui::crossterm::style::Stylize;
+
         if let Some(info) = &self.info {
             writeln!(f, "{} {}", "Commit".yellow().bold(), info.hash.as_str().yellow())?;
             writeln!(f, "{} {} <{}>", "Author".bold(), info.author, info.author_email)?;
@@ -148,7 +154,7 @@ impl Display for Commit {
         }
 
         if let Some(message) = &self.message {
-            write!(f, "{}", message.raw_title().magenta())?;
+            write!(f, "{}", message.raw_title().blue())?;
 
             let body = message.raw_full_body();
             if !body.is_empty() {
@@ -157,5 +163,61 @@ impl Display for Commit {
         }
 
         Ok(())
+    }
+}
+
+impl Commit {
+    pub fn as_text(&self) -> Text<'static> {
+        use matetui::ratatui::style::Stylize;
+
+        #[inline]
+        fn normalize_labels(
+            author: Cow<str>,
+            date: Cow<str>,
+            commit: Cow<str>,
+        ) -> (String, String, String) {
+            let max_len = author.len().max(date.len()).max(commit.len());
+            (
+                format!("{:<width$} ", author, width = max_len),
+                format!("{:<width$} ", date, width = max_len),
+                format!("{:<width$} ", commit, width = max_len),
+            )
+        }
+
+        if self.info.is_none() || self.message.is_none() {
+            panic!("Commit info or message missing, something went wrong");
+        }
+
+        let message = self.message.as_ref().unwrap();
+        let (hash, author, date) = {
+            let info = self.info.as_ref().unwrap();
+            (
+                info.hash.to_string(),
+                format!("{} <{}>", info.author, info.author_email),
+                info.date.to_string(),
+            )
+        };
+
+        let (author_lbl, date_lbl, commit_lbl) =
+            normalize_labels(t!("Author"), t!("Date"), t!("Commit"));
+
+        let mut text = Text::from(vec![
+            Line::from(vec![commit_lbl.bold().yellow(), hash.yellow()]),
+            Line::from(vec![author_lbl.bold(), author.into()]),
+            Line::from(vec![date_lbl.bold(), date.into()]),
+            "".into(),
+            message.raw_title().to_string().blue().into(),
+        ]);
+
+        let body = message.raw_full_body();
+        if !body.is_empty() {
+            text.push_line(Line::from(""));
+            let body_lines = body.lines().map(|l| l.to_string()).collect::<Vec<_>>();
+            for line in body_lines {
+                text.push_line(Line::from(line));
+            }
+        }
+
+        text
     }
 }
