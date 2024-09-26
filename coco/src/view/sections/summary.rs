@@ -1,7 +1,7 @@
 use {
     cc_core::{
         config::Theme,
-        state::{commit::ConventionalCommitMessage, MutexAppState},
+        state::{commit::Commit, MutexAppState},
         t,
     },
     matetui::{
@@ -20,7 +20,7 @@ component! {
     pub struct SummarySection {
         theme: Theme,
         app_state: MutexAppState,
-        commit: Option<ConventionalCommitMessage>
+        commit: Option<Commit>
     }
 }
 
@@ -53,7 +53,7 @@ impl Component for SummarySection {
         match message.as_str() {
             "committing:done" => {
                 let state = self.app_state.lock().unwrap();
-                self.commit = Some(state.get_commit_message());
+                self.commit = Some(state.get_commit());
             }
             "kb:enter" => self.send_action(Action::Quit),
             _ => {}
@@ -69,39 +69,13 @@ impl Component for SummarySection {
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         if let Some(commit) = &self.commit {
-            // HACK: harcoded commit info
-            //       The commit info should be fetched from `app_state`.
-            //       This was overlooked while developing the commit section and it should be fixed
-            //       as soon as possible
             let mut text = Text::from(vec![
                 Line::from(format!("{} 🍻", t!("Done! This is your commit"))).bold(),
                 "".into(),
-                Line::from(vec![
-                    "Commit ".bold().yellow(),
-                    "9c4170d822cfa47b90edb12058a6ddd1a7c404c9".yellow(),
-                ]),
-                Line::from(vec!["Author ".bold(), "Lucas Colombo".into()]),
-                Line::from(vec!["Date   ".bold(), "Fri Sep 30 11:26:28 2022 -0300".into()]),
-                "".into(),
-                commit.raw_title().to_string().magenta().into(),
-                "".into(),
             ]);
 
-            for line in &commit.body {
-                if line.trim().is_empty() {
-                    continue;
-                }
-                text.push_line(Line::from(line.clone()));
-            }
-
-            if !commit.raw_body().is_empty() {
-                text.push_line(Line::from("".to_string()));
-            }
-
-            for line in &commit.footer {
-                if line.trim().is_empty() {
-                    continue;
-                }
+            let commit_text = commit.as_text();
+            for line in commit_text {
                 text.push_line(Line::from(line.clone()));
             }
 
@@ -109,7 +83,7 @@ impl Component for SummarySection {
 
             f.render_widget(Paragraph::new(text), commit_area);
             f.render_widget(
-                Paragraph::new("Press any key to quit...").centered().block(
+                Paragraph::new(t!("Press any key to quit...")).centered().block(
                     Block::default()
                         .borders(Borders::TOP)
                         .border_style(Style::default().dim())

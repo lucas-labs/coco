@@ -22,7 +22,7 @@ debug-assertions = false
 
 [workspace.dependencies]
 indoc = "2.0.5"
-matetui = "0.3.3"
+matetui = "0.3.4"
 rust-i18n = "3.1.2"
 eyre = { version = "0.6.12", default-features = false, features = [
     "auto-install",
