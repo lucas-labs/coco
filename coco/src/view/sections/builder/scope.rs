@@ -2,6 +2,7 @@ use {
     cc_core::{
         config::Theme,
         state::{MutexAppState, StepStatus},
+        t,
     },
     matetui::{
         component,
@@ -48,8 +49,8 @@ impl ScopeStep {
                 header_fg: theme.get("scope:fg"),
                 header_sec: theme.get("scope:sec"),
             })
-            .with_title("Scope")
-            .with_subtitle("optional")
+            .with_title("scope")
+            .with_subtitle(t!("optional"))
             .with_single_line(true)
             .with_max_char_count(20);
             Some(input)
@@ -153,9 +154,9 @@ impl Component for ScopeStep {
                 .constraints([Constraint::Max(2), Constraint::Min(0)])
                 .areas(area);
 
-            let desc = Paragraph::new(
-                "Select the scope of your commit (use arrows to move around, enter to select)",
-            )
+            let desc = Paragraph::new(t!(
+                "Select the scope of your commit (use arrows to move around, enter to select)"
+            ))
             .centered()
             .wrap(Wrap { trim: true });
 

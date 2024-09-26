@@ -1,4 +1,4 @@
-use {eyre::Result, indoc::indoc};
+use {cc_core::t, eyre::Result, indoc::formatdoc};
 
 pub fn version() -> Result<()> {
     const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -8,19 +8,22 @@ pub fn version() -> Result<()> {
 }
 
 pub fn help() -> Result<()> {
-    let h = indoc! {
+    let h = formatdoc! {
         r#"
         coco
         
-            an interactive cli for creating conventional commits
+            {}
 
         USAGE:
             coco [FLAGS]
 
         FLAGS:
-            -h, --help       Prints help information
-            -v, --version    Prints version information
-        "#
+            -h, --help       {}
+            -v, --version    {}
+        "#,
+        t!("an interactive cli for creating conventional commits"),
+        t!("Prints help information"),
+        t!("Prints version information")
     };
 
     println!("{}", h);

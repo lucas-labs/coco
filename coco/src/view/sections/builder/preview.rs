@@ -2,6 +2,7 @@ use {
     cc_core::{
         config::Theme,
         state::{commit::ConventionalCommitMessage, MutexAppState, StepStatus},
+        t,
     },
     matetui::{
         component,
@@ -100,7 +101,7 @@ impl Component for PreviewStep {
         let [commit_area, description_area, decision_area] = self.get_body_layout(area, &commit);
         let block = Block::default().padding(Padding::symmetric(2, 1)).on_white();
 
-        let description = Paragraph::new("Do you wish to continue and execute the commit?")
+        let description = Paragraph::new(t!("Do you wish to continue and execute the commit?"))
             .alignment(Alignment::Center);
 
         let yes_style = if self.decision {
@@ -116,9 +117,9 @@ impl Component for PreviewStep {
         };
 
         let decision = Paragraph::new(Line::from(vec![
-            Span::from("Yes").style(yes_style),
+            Span::from(t!("Yes")).style(yes_style),
             Span::from("    /    ").dim(),
-            Span::from("No").style(no_style),
+            Span::from(t!("No")).style(no_style),
         ]))
         .alignment(Alignment::Center);
 

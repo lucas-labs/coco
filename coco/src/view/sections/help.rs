@@ -1,5 +1,5 @@
 use {
-    cc_core::config::Theme,
+    cc_core::{config::Theme, t},
     matetui::{component, ratatui::layout::Rect, Component, Frame},
     tui::{help, widgets::coco_help::CocoHelp},
 };
@@ -19,32 +19,26 @@ impl HelpSection {
     }
 }
 
-// "; observation => "Press 'q' or 'Ctrl+c' to quit the application",
-// "Quit the application": ["q", "Ctrl+c"]; observation => "Press 'q' or 'Ctrl+c' to quit the application",
-// "Navigate up": ["k", "Up arrow"],
-// "Navigate down": ["j", "Down arrow"],
-// "Navigate left": ["h", "Left arrow"],
-
 impl Component for HelpSection {
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         let sections = help! {
-            "Help" => {
-                "Toggle this help on and off": ["F2"],
+            t!("Help") => {
+                t!("Show or hide this help") => ["F2"],
             }
-            "General" => {
-                "Exit": ["ctrl+c"],
-                "Go to the next step": ["pg-dn"],
-                "Go to the previous step": ["pg-up"],
+            t!("General") => {
+                t!("Exit") => ["ctrl+c"],
+                t!("Go to the next step") => ["pg-dn"],
+                t!("Go to the previous step") => ["pg-up"],
             }
-            "Text Areas" => {
-                "Submit": ["enter"],
-                "New Line / carriage return": ["shift+enter", "alt+enter", "ctrl+enter"]; observation => "depends on the terminal",
+            t!("Text Areas") => {
+                t!("Submit") => ["enter"],
+                t!("New Line / carriage return") => ["shift+enter", "alt+enter", "ctrl+enter"]; observation => t!("depends on the terminal"),
             }
-            "Switch" => {
-                "Toggle the switch": ["space"],
-                "Set the switch to true": ["🠆"],
-                "Set the switch to false": ["🠄"],
-                "Accept": ["enter"],
+            t!("Switch") => {
+                t!("Toggle the switch") => ["space"],
+                t!("Set the switch to true") => ["🠆"],
+                t!("Set the switch to false") => ["🠄"],
+                t!("Accept") => ["enter"],
             }
         };
 

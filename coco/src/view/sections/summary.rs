@@ -2,6 +2,7 @@ use {
     cc_core::{
         config::Theme,
         state::{commit::ConventionalCommitMessage, MutexAppState},
+        t,
     },
     matetui::{
         component,
@@ -68,8 +69,12 @@ impl Component for SummarySection {
 
     fn draw(&mut self, f: &mut Frame<'_>, area: Rect) {
         if let Some(commit) = &self.commit {
+            // HACK: harcoded commit info
+            //       The commit info should be fetched from `app_state`.
+            //       This was overlooked while developing the commit section and it should be fixed
+            //       as soon as possible
             let mut text = Text::from(vec![
-                Line::from("Done! This is your commit 🍻").bold(),
+                Line::from(format!("{} 🍻", t!("Done! This is your commit"))).bold(),
                 "".into(),
                 Line::from(vec![
                     "Commit ".bold().yellow(),

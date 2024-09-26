@@ -1,0 +1,143 @@
+_version: 2
+'11cw':
+  en: an interactive cli for creating conventional commits
+  es: an interactive cli for creating conventional commits
+'1hpR':
+  en: optional
+  es: opcional
+'25Qz':
+  en: for help
+  es: para ayuda
+'29Z5':
+  en: Select the type of your commit (use arrows to move around, enter to select)
+  es: Selecciona el tipo del commit (usa las flechas para moverte, enter para seleccionar)
+'2cRk':
+  en: Do you wish to continue and execute the commit?
+  es: ¿Desea continuar y ejecutar el commit?
+'3B3w':
+  en: Prints version information
+  es: Mostrar versión del programa
+'3P72':
+  en: Creating a
+  es: Creando un commit de tipo
+'4V2f':
+  en: Press
+  es: Presione
+'4YdK':
+  en: commit
+  es: ""
+'4arE':
+  en: required
+  es: requerido
+'4re4':
+  en: Prints help information
+  es: Mostrar ayuda
+'6P62':
+  en: on scope
+  es: en el scope
+'7Szp':
+  en: Select the scope of your commit (use arrows to move around, enter to select)
+  es: Selecciona el scope del commit (usa las flechas para moverte, enter para seleccionar)
+AcIT:
+  en: Does this commit introduces a breaking change?
+  es: ¿Este commit introduce un breaking change?
+'No':
+  en: 'No'
+  es: 'No'
+'Yes':
+  en: 'Yes'
+  es: 'Sí'
+apQn:
+  en: for new line
+  es: para nueva línea
+or:
+  en: or
+  es: o
+'3Yby':
+  en: Toggle the switch
+  es: Alternar el switch entre ON y OFF
+'46MD':
+  en: Done! This is your commit
+  es: ¡Listo! Este es tu commit
+'4fRI':
+  en: depends on the terminal
+  es: depende de la consola
+'4k74':
+  en: Accept
+  es: Aceptar
+'4tGD':
+  en: Text Areas
+  es: Áreas de texto
+'50Xj':
+  en: Go to the next step
+  es: Ir al siguiente paso
+'69a0':
+  en: New Line / carriage return
+  es: Nueva línea
+'6DHf':
+  en: Set the switch to true
+  es: Establecer el switch a true
+X18e:
+  en: Set the switch to false
+  es: Establecer el switch a false
+'6oi3':
+  en: General
+  es: General
+'7OEo':
+  en: Switch
+  es: Switch
+CT4I:
+  en: Go to the previous step
+  es: Ir al paso anterior
+Exit:
+  en: Exit
+  es: Salir
+Help:
+  en: Help
+  es: Ayuda
+QG6N:
+  en: Submit
+  es: Enviar
+'5kPD':
+  en: Show or hide this help
+  es: Mostrar u ocultar esta ayuda
+'1PMv':
+  en: A code change that improves performance
+  es:  Un cambio de código que mejora el rendimiento
+'1vDA':
+  en: Changes to our CI configuration files and scripts
+  es: Cambios en los archivos y scripts de configuración de CI
+'1x6l':
+  en: Fixes a bug
+  es: Corrige un bug
+'2efQ':
+  en: Reverts a previous commit
+  es: Revierte un commit previo
+'3Y9Y':
+  en: Code cosmetic changes (formatting, indentation, etc.)
+  es: Cambios cosméticos en el código (formato, indentación, etc.)
+'3u0x':
+  en: Releases a new version
+  es: Lanza una nueva versión
+'4WIs':
+  en: A change that only adds or updates tests
+  es: Un cambio que solo agrega o actualiza tests
+'5UBA':
+  en: Introduces a new feature
+  es: Introduce una nueva funcionalidad/feature
+'6PrX':
+  en: Other changes that don't modify src or test files
+  es: Otros cambios que no modifican archivos src o tests
+'6oRz':
+  en: Work in progress
+  es: Trabajo en progreso
+bM5O:
+  en: Documentation only changes
+  es: Cambios de documentación únicamente
+by8W:
+  en: A change that refactors code without adding or removing features
+  es: Un cambio que refactoriza código sin agregar o eliminar funcionalidades
+qR8p:
+  en: A change that updates or adds translations (internationalization)
+  es: Un cambio que actualiza o agrega traducciones (internacionalización)
+

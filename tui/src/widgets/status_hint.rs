@@ -1,5 +1,5 @@
 use {
-    cc_core::config::CommitKind,
+    cc_core::{config::CommitKind, t},
     matetui::ratatui::{
         prelude::{Buffer, Line, Rect, Widget},
         style::Stylize,
@@ -45,11 +45,11 @@ impl Widget for StatusHint {
             ("unknown".green().bold(), "❓".into(), "This commit kind is unknown!".dim())
         };
 
-        line.extend(vec!["Creating a ".into(), kind, " commit".into()]);
+        line.extend(vec![t!("Creating a").into(), " ".into(), kind, t!("commit").into()]);
 
         if let Some(scope) = self.scope {
             if !scope.is_empty() {
-                line.extend(vec![" on scope ".into(), scope.blue()]);
+                line.extend(vec![" ".into(), t!("on scope").into(), " ".into(), scope.blue()]);
             }
         }
 

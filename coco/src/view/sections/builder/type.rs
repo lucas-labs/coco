@@ -2,6 +2,7 @@ use {
     cc_core::{
         config::Theme,
         state::{MutexAppState, StepStatus},
+        t,
     },
     matetui::{
         component,
@@ -99,14 +100,14 @@ impl Component for TypeStep {
 
         f.render_widget(logo, logo_area);
 
-        let line = Line::from(vec!["Press".into(), " F2 ".bold(), "for help".into()]);
+        let line = Line::from(vec![t!("Press").into(), " F2 ".bold(), t!("for help").into()]);
         f.render_widget(Paragraph::new(line).centered(), help_area);
         // #endregion
 
         f.render_widget(
-            Paragraph::new(
-                "Select the type of your commit (use arrows to move around, enter to select)",
-            )
+            Paragraph::new(t!(
+                "Select the type of your commit (use arrows to move around, enter to select)"
+            ))
             .centered(),
             title_area,
         );

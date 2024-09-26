@@ -1,3 +1,7 @@
+use cc_core::init_i18n;
+
+init_i18n!();
+
 pub mod components {
     mod logo;
 

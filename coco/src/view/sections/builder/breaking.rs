@@ -2,12 +2,14 @@ use {
     cc_core::{
         config::Theme,
         state::{MutexAppState, StepStatus},
+        t,
     },
     matetui::{
         component,
         ratatui::{
             layout::{Constraint, Direction, Flex, Layout, Rect},
             prelude::{Line, Stylize},
+            text::Span,
             widgets::Paragraph,
         },
         widgets::switch::Switch,
@@ -100,12 +102,15 @@ impl Component for BreakingChangeStep {
             .with_color_off(self.theme.get("switch:off"));
 
         let line = Line::from(vec![
-            "Does this commit introduces a breaking change? (".into(),
+            t!("Does this commit introduces a breaking change?").into(),
+            " (".into(),
             // Yes / No depending on the choice
             if self.breaking_change_choice {
-                "Yes".bold().fg(self.theme.get("yes"))
+                let yes: Span = t!("Yes").into();
+                yes.bold().fg(self.theme.get("yes"))
             } else {
-                "No".bold().dim()
+                let no: Span = t!("No").into();
+                no.bold().dim()
             },
             ")".into(),
         ]);
