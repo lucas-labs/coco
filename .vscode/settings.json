@@ -4,10 +4,10 @@
         "Taskfile.yaml": true,
         ".cocorc": true,
         ".task": true,
-        ".cargo": true,
-        // "Cargo.toml": true,
+        ".cargo": true,        
+        ".github": true,
 
-        // 📦
+        // 📦 package
         "Cargo.lock": true,
         "target": true,
 
@@ -15,7 +15,7 @@
         "**/**/README.md": true,
         "LICENSE": true,
 
-        // 🗑️
+        // 🗑️ trash
         "check_size.py": true,
         "*.code-workspace": true,
         ".gitignore": true,
