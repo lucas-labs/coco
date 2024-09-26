@@ -147,9 +147,9 @@ impl Display for Commit {
         use matetui::ratatui::crossterm::style::Stylize;
 
         if let Some(info) = &self.info {
-            writeln!(f, "{} {}", "Commit".yellow().bold(), info.hash.as_str().yellow())?;
-            writeln!(f, "{} {} <{}>", "Author".bold(), info.author, info.author_email)?;
-            writeln!(f, "{}   {}", "Date".bold(), info.date)?;
+            writeln!(f, "{} {}", t!("Commit").yellow().bold(), info.hash.as_str().yellow())?;
+            writeln!(f, "{} {} <{}>", t!("Author").bold(), info.author, info.author_email)?;
+            writeln!(f, "{}   {}", t!("Date").bold(), info.date)?;
             writeln!(f)?;
         }
 

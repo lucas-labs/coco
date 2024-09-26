@@ -61,3 +61,7 @@ tasks:
     cmds:
       - cargo release major --execute --no-confirm --package coco
 
+  i18n:
+    desc: 🌍 search untranslated strings
+    cmds:
+      - cargo i18n
