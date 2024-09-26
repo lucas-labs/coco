@@ -1,9 +1,8 @@
 mod cli;
 mod view;
 
-use cc_core::{init_i18n, setup_locale};
 use {
-    cc_core::{git, state::default_app_state},
+    cc_core::{git, init_i18n, setup_locale, state::default_app_state, t},
     cli::{
         action::{get_action, Action},
         helpver::{help, version},
@@ -57,12 +56,14 @@ async fn main() -> Result<()> {
 
                 app.run().await?;
 
-                // TODO: don't show the commit if the user quitted before actually committing
-                //       right now, we show the commit message even if the user quits
-                //       before actually committing, which could be confusing and misleading
-                //       making the user think that the commit was actually performed.
-                // show the commit before exiting
-                println!("{}", state.lock().unwrap().get_commit());
+                // if the commit was performed (state.commit.info is Some, print the commit)
+                let commit = state.lock().unwrap().get_commit();
+
+                if commit.info.is_some() && commit.message.is_some() {
+                    println!("{}", state.lock().unwrap().get_commit());
+                } else {
+                    println!("{}", t!("The commit was aborted").yellow());
+                }
             }
             Err(e) => println!("{}: {}", "Error listing staged files".red(), e),
         },

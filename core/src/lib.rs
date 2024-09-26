@@ -12,5 +12,4 @@ pub fn color(col: &str) -> Color {
     Color::from_str(col).unwrap_or(Color::Reset)
 }
 
-pub use i18n::setup_locale;
-pub use i18n::t;
+pub use i18n::{setup_locale, t};
