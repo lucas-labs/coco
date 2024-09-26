@@ -1,10 +1,18 @@
 [package]
 name = "rs-coco"
 version = "0.0.0-alpha.0"
-description = "🥥 » coco » an interactive cli for creating conventional commits."
+edition = "2021"
+description = "🥥 coco » an interactive cli for creating conventional commits."
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
 readme = "README.md"
-edition = "2021"
+license = "MIT"
+license-file = "LICENSE"
+documentation = "https://docs.rs/rs-coco"
+repository = "https://github.com/lucas-labs/coco"
+homepage = "https://github.com/lucas-labs/coco"
+keywords = ["cli", "conventional-commits", "git", "commit", "conventional", "commit"]
+categories = ["command-line-interface", "command-line-utilities", "development-tools", "config"]
+
 
 [profile.release]
 strip = "symbols"

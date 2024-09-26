@@ -11,11 +11,11 @@
         "Cargo.lock": true,
         "target": true,
 
-        // 📝 readmes
-        "**/**/README.md": true,
-        "LICENSE": true,
+        // // 📝 readmes
+        // "**/**/README.md": true,
+        // "LICENSE": true,
 
-        // 🗑️ trash
+       // 🗑️ trash
         "check_size.py": true,
         "*.code-workspace": true,
         ".gitignore": true,

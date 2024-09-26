@@ -10,13 +10,13 @@
 
 <p align="center"><img src="https://raw.githubusercontent.com/lucas-labs/coco/refs/heads/master/.github/media/coco-demo.gif" width="100%"></p>
 
-   # `coco` › [![LICENSE_BADGE][LICENSE_BADGE]][LICENSE_LINK] [![ISSUES_BADGE][ISSUES_BADGE]][ISSUES_LINK]
+   # `coco` › [![LICENSE_BADGE][LICENSE_BADGE]][LICENSE_LINK] [![CRATE_BADGE][CRATE_BADGE]][CRATE_LINK] [![ISSUES_BADGE][ISSUES_BADGE]][ISSUES_LINK]
 
 This is a port to Rust ⚡ of the original (and slower)
 [lucas-labs/coco-js](https://github.com/lucas-labs/coco-js), that was implemented using `node.js`.
 
-This implementation, being written in Rust, is faster, more efficient and has has implemented
-several improvements over the original implementation.
+This implementation, being written in Rust, is faster, more efficient and has implemented several
+improvements over the original implementation.
 
 ## Installation
 
@@ -38,7 +38,8 @@ $ coco
 root (per repository config) or in your users home directory (global config). The file should be a
 valid YAML.
 
-See the [`coco.yml`](https://github.com/lucas-labs/coco/blob/master/coco.yml) file from this repository for an example configuration.
+See the [`coco.yml`](https://github.com/lucas-labs/coco/blob/master/coco.yml) file from this
+repository for an example configuration.
 
 > [!NOTE]
 > Config is totally optional. If no config is provided, `coco` will use default values.
@@ -83,7 +84,9 @@ Provided `useEmoji` is `true`, an example of a commit message would be:
 `feat(api): ✨ add new endpoint`
 
 #### `askScope`
-Whether to ask for the scope of the commit. IF set to `true`, the user will be prompted to enter or select a scope (depending if scope list was provided by user config or not). If set to `false`, the scope will be omitted from the commit message and the cli won't ask for it.
+Whether to ask for the scope of the commit. IF set to `true`, the user will be prompted to enter or
+select a scope (depending if scope list was provided by user config or not). If set to `false`, the
+scope will be omitted from the commit message and the cli won't ask for it.
 
 ```yaml
 askScope: true
@@ -129,8 +132,8 @@ maxSummaryLength: 72
 #### `theme`
 
 You can also customize the colors of the CLI by providing a `theme` object.
-Check the [`coco.yml`](https://github.com/lucas-labs/coco/blob/master/coco.yml) file to a full list of the available theme configuration tokens
-with their default values.
+Check the [`coco.yml`](https://github.com/lucas-labs/coco/blob/master/coco.yml) file to a full list
+of the available theme configuration tokens with their default values.
 
 ```yaml
 theme:
@@ -164,8 +167,11 @@ askBreakingChange: true # default
 
 
 <!-- Links -->
-  [LICENSE_LINK]:    https://github.com/lucas-labs/coco/blob/master/LICENSE.md
+  [LICENSE_LINK]:    https://github.com/lucas-labs/coco/blob/master/LICENSE
   [LICENSE_BADGE]:   https://img.shields.io/github/license/lucas-labs/coco?color=005af0&style=flat-square
   
   [ISSUES_LINK]:     https://github.com/lucas-labs/coco/issues
   [ISSUES_BADGE]:    https://img.shields.io/github/issues-raw/lucas-labs/coco?color=1ed760&style=flat-square
+
+  [CRATE_LINK]:      https://crates.io/crates/rs-coco
+  [CRATE_BADGE]:     https://img.shields.io/crates/v/rs-coco?style=flat-square&label=%20crate&color=%23fecc6a
