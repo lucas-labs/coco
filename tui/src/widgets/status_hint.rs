@@ -45,7 +45,7 @@ impl Widget for StatusHint {
             ("unknown".green().bold(), "❓".into(), "This commit kind is unknown!".dim())
         };
 
-        line.extend(vec![t!("Creating a").into(), " ".into(), kind, t!("commit").into()]);
+        line.extend(vec![t!("Creating a").into(), " ".into(), kind, t!(" commit").into()]);
 
         if let Some(scope) = self.scope {
             if !scope.is_empty() {
