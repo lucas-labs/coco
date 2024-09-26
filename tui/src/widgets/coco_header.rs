@@ -1,10 +1,12 @@
-use cc_core::t;
-use matetui::ratatui::{
-    layout::{Alignment, Constraint, Layout},
-    prelude::{Buffer, Line, Rect, Span, Widget},
-    style::{Color, Style, Stylize},
-    text::Text,
-    widgets::Paragraph,
+use {
+    cc_core::t,
+    matetui::ratatui::{
+        layout::{Alignment, Constraint, Layout},
+        prelude::{Buffer, Line, Rect, Span, Widget},
+        style::{Color, Style, Stylize},
+        text::Text,
+        widgets::Paragraph,
+    },
 };
 
 #[derive(Default)]

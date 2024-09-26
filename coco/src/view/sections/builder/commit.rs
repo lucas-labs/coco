@@ -40,7 +40,11 @@ fn calculate_summary_max_char_count(app_state: &MutexAppState) -> usize {
     if let Some(kind) = kind {
         // the commit message has a format:
         // <type>(<scope>): {emoji} <summary>
-        let scope_len = if scope.len() > 0 { scope.len() + 2 } else { 0 };
+        let scope_len = if !scope.is_empty() {
+            scope.len() + 2
+        } else {
+            0
+        };
         let type_len = kind.name.len();
         let emoji_len = if use_emoji { 3 } else { 0 }; // emoji + 2 spaces
         state.config.max_summary_length - (type_len + scope_len + 1 + emoji_len)

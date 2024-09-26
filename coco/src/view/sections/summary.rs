@@ -76,7 +76,7 @@ impl Component for SummarySection {
 
             let commit_text = commit.as_text();
             for line in commit_text {
-                text.push_line(Line::from(line.clone()));
+                text.push_line(line.clone());
             }
 
             let [commit_area, footer_area] = self.get_layout(area, text.height());
