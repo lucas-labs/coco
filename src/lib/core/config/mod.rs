@@ -1,8 +1,7 @@
 mod search;
 
 use {
-    crate::tui::color,
-    lool::s,
+    crate::{s, tui::color},
     matetui::{ratatui::style::Color, widgets::gridselector::GridItem},
     rust_i18n::t,
     search::fetch_config_paths,

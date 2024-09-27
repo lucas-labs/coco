@@ -3,9 +3,11 @@
 //! This module provides a way to execute a git commit command.
 use {
     super::commit_info::commit_info,
-    crate::core::state::commit::{CommitInfo, ConventionalCommitMessage},
+    crate::{
+        core::state::commit::{CommitInfo, ConventionalCommitMessage},
+        fail,
+    },
     eyre::Result,
-    lool::fail,
     std::process::Command,
 };
 

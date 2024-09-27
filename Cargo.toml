@@ -34,34 +34,34 @@ name = "coco"
 path = "src/lib/lib.rs"
 
 [dependencies]
-indoc = "2.0.5"
-matetui = "0.3.4"
-rust-i18n = "3.1.2"
-eyre = { version = "0.6.12", default-features = false, features = [
-    "auto-install",
-] }
-lool = { git = "https://github.com/lucodear/lool", version = "0.9.0", features = [
-    "cli.stylize",
-    "macros"
-] }
 strum = { version = "0.26.1", features = ["derive"] }
 serde = { version = "1.0.210", features = ["derive"] }
-tokio = { version = "1.40.0", features = [
+unicode-width = "0.2.0"
+serde_yaml = "0.9.34"
+tokio-util = "0.7.12"
+sys-locale = "0.3.1"
+pico-args = "0.5.0"
+rust-i18n = "3.1.2"
+matetui = "0.3.4"
+indoc = "2.0.5"
+dirs = "5.0.1"
+
+[dependencies.tokio]
+version = "1.40.0"
+features = [
     "tokio-macros",
     "macros",
     "rt-multi-thread",
     "sync",
     "time",
-] }
-unicode-width = "0.2.0"
-tokio-util = "0.7.12"
-pico-args = "0.5.0"
-sys-locale = "0.3.1"
-serde_yaml = "0.9.34"
-dirs = "5.0.1"
+]
 
-[dev-dependencies]
-tempfile = "3.12"
+[dependencies.eyre]
+version = "0.6.12"
+default-features = false
+features = [
+    "auto-install",
+]
 
 [i18n]
 available-locales = ["en", "es"]

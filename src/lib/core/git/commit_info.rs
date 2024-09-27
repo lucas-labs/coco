@@ -3,7 +3,7 @@
 //! This module provides a way to execute a `git show {hash}` command in order to get some
 //! useful information about a commit.
 
-use {crate::core::state::commit::CommitInfo, eyre::Result, lool::fail, std::process::Command};
+use {crate::{core::state::commit::CommitInfo, fail}, eyre::Result, std::process::Command};
 
 /// print the commit information for the given hash.
 pub fn commit_info(hash: &str, cwd: Option<&str>) -> Result<CommitInfo> {
