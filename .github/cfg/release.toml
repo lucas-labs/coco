@@ -1,0 +1,18 @@
+allow-branch = ["master"]
+sign-commit = true
+sign-tag = true
+pre-release-commit-message = "release: 🔖 v{{version}}"
+tag-message = "release: 🔖 v{{version}}"
+tag-prefix = ""
+consolidate-commits = false
+tag-name = "v{{version}}"
+pre-release-hook = [
+    "git",
+    "cliff",
+    "-c",
+    ".github/cfg/cliff.toml",
+    "--tag",
+    "v{{version}}",
+    "-o",
+    "CHANGELOG.md"
+]
