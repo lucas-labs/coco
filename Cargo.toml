@@ -5,7 +5,6 @@ edition = "2021"
 description = "🥥 coco » an interactive cli for creating conventional commits."
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
 readme = "README.md"
-license = "MIT"
 license-file = "LICENSE"
 documentation = "https://docs.rs/rs-coco"
 repository = "https://github.com/lucas-labs/coco"
@@ -15,6 +14,18 @@ categories = ["command-line-interface", "command-line-utilities", "development-t
 
 
 [profile.release]
+strip = "symbols"
+lto = "fat"
+codegen-units = 1
+opt-level = "z"
+panic = "abort"
+rpath = false
+overflow-checks = false
+debug = 0
+debug-assertions = false
+
+[profile.dist]
+inherits = "release"
 strip = "symbols"
 lto = "fat"
 codegen-units = 1
@@ -63,10 +74,24 @@ features = [
     "auto-install",
 ]
 
-[i18n]
+[package.metadata.i18n]
 available-locales = ["en", "es"]
 default-locale = "en"
 load-path = "locales"
 minify-key = true
 minify-key-len = 4
 minify-key-thresh = 4
+
+# Config for 'cargo dist'
+[workspace.metadata.dist]
+github-attestations = true
+cargo-dist-version = "0.19.1"
+pr-run-mode = "skip"
+ci = "github"
+installers = []
+targets = [
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc"
+]
