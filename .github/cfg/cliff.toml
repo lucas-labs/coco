@@ -26,9 +26,9 @@ body = """
 {% else -%}
     ## [Unreleased]
 {% endif -%}
-
+### Notable Changes
 {% for group, commits in commits | group_by(attribute="group") %}
-    ### {{ group | striptags | trim | upper_first }}
+    #### {{ group | striptags | trim | upper_first }}
     {%- for commit in commits %}
         - {{ commit.message | split(pat="\n") | first | upper_first | trim }}\
             {% if commit.remote.username %} by [@{{ commit.remote.username }}]\
@@ -42,7 +42,7 @@ body = """
 {% endfor %}
 
 {%- if github.contributors | filter(attribute="is_first_time", value=true) | length != 0 %}
-  ## New Contributors
+  ### New Contributors
 {%- endif -%}
 
 {% for contributor in github.contributors | filter(attribute="is_first_time", value=true) %}

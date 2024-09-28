@@ -6,8 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.0.1] - 2024-09-28
+### Notable Changes
 
-### ✨ Features
+#### ✨ Features
 - Main committing logic by [@lucas-labs](https://github.com/lucas-labs) [`7f4ce1e`](7f4ce1ee5829f7c4d91756dc925ddeb2b4f936cd)
 - Builder type step header by [@lucas-labs](https://github.com/lucas-labs) [`b64c5ad`](b64c5ad92cf295c752e176b96107478658d5ab9a)
 - Add headers to all steps by [@lucas-labs](https://github.com/lucas-labs) [`90c14b9`](90c14b9d13fbd592887e70f50ed1744df6adcbec)
@@ -20,22 +21,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to set the locale via env var on debug builds by [@lucas-labs](https://github.com/lucas-labs) [`6a4f666`](6a4f6663a84872abcf1274868e4e2f39d9b3a5dc)
 - Don't show the commit message if the user quitted prematurely by [@lucas-labs](https://github.com/lucas-labs) [`PR #22`](https://github.com/lucas-labs/coco/pull/22)
 
-### 🚑 Bug Fixes
+#### 🚑 Bug Fixes
 - Fix english translation for the "creating commit" message by [@lucas-labs](https://github.com/lucas-labs) [`PR #18`](https://github.com/lucas-labs/coco/pull/18)
 - Hardcoded commit info in summary section by [@lucas-labs](https://github.com/lucas-labs) [`4c0059f`](4c0059fb69f3c149bcca7c8fb0eafc5cb16ca1e5)
 
-### 🔨 Refactor
+#### 🔨 Refactor
 - Restructure the project to make it a single crate by [@lucas-labs](https://github.com/lucas-labs) [`PR #25`](https://github.com/lucas-labs/coco/pull/25)
 - Remove lool dependency by [@lucas-labs](https://github.com/lucas-labs) [`787f196`](787f1965bdb2121796e4f2437a175a33ec719e54)
 
-### 📝 Documentation
+#### 📝 Documentation
 - Add README.md file by [@lucas-labs](https://github.com/lucas-labs) [`PR #23`](https://github.com/lucas-labs/coco/pull/23)
 
-### 🌐 Internationalization
+#### 🌐 Internationalization
 - Implement i18n using rust-i18n crate by [@lucas-labs](https://github.com/lucas-labs) [`d49236b`](d49236b3277f545c18fd21cc3a502cb8cccbcd69)
 - Summary view i18n translation by [@lucas-labs](https://github.com/lucas-labs) [`PR #21`](https://github.com/lucas-labs/coco/pull/21)
 
-### ⚙️  Miscellaneous Tasks
+#### ⚙️  Miscellaneous Tasks
 - Implement --no-stage-check argument by [@lucas-labs](https://github.com/lucas-labs) [`1d74e05`](1d74e057f2481fb1b72858524eec000b6e8cea11)
 - Prepare the package to be published on crates.io by [@lucas-labs](https://github.com/lucas-labs) [`PR #26`](https://github.com/lucas-labs/coco/pull/26)
 - Add cargo dist configuration by [@lucas-labs](https://github.com/lucas-labs) [`ad31d09`](ad31d096ea1383357089e698e86cd194653e4254)
@@ -44,6 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changelog task by [@lucas-labs](https://github.com/lucas-labs) [`abf23da`](abf23da0cbd31757c4b969455a6541144cc2dea4)
 - Remove repeated keyword in Cargo.toml by [@lucas-labs](https://github.com/lucas-labs) [`3dfdc8b`](3dfdc8be85a4cfac2be967249898737a097f0d72)
 
-## New Contributors
+### New Contributors
 * [@lucas-labs](https://github.com/lucas-labs) made their first contribution 🎉
 
