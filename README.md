@@ -20,11 +20,39 @@ improvements over the original implementation.
 
 ## Installation
 
-Pre-built binaries not available yet.
+### From binary (github releases)
+
+You can download the latest binary for your platform from the
+[releases page](https://github.com/lucas-labs/coco/releases).
+
+Then drop the binary in your `PATH` and you're good to go.
+
+### From source (crates.io)
+
+You can also install `coco` from source using `cargo`:
+
+```bash
+$ cargo install rs-coco
+```
+
+### Using `binstall`
+
+If you have `binstall` installed, you can install `coco` with:
+
+```bash
+$ cargo binstall rs-coco
+```
 
 ## Usage
 
-Drop the `coco` binary somewhere in your `PATH` and run it in your repository:
+Drop the `coco` binary somewhere in your `PATH`:
+
+```bash
+$ coco --version
+rs-coco vx.y.z
+```
+
+Then you can use `coco` to create conventional commits by running it in your repository:
 
 ```bash
 $ coco
