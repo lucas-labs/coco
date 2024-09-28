@@ -1,6 +1,6 @@
 [package]
 name = "rs-coco"
-version = "0.0.0"
+version = "0.0.1"
 edition = "2021"
 description = "🥥 coco » an interactive cli for creating conventional commits."
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
