@@ -32,12 +32,12 @@ tasks:
   lint:
     desc: 🧶 lint coco
     cmds:
-      - cargo clippy --fix --workspace --allow-staged
+      - cargo clippy --fix --allow-staged
   
   lint:check:
     desc: 🧶 check coco linting
     cmds:
-      - cargo clippy --workspace
+      - cargo clippy
 
   fmt+lint:
     desc: 🎨🧶 format and lint coco
@@ -46,22 +46,23 @@ tasks:
       - git add .
       - task lint
 
-  release:patch:
-    desc: 🚀 release coco
-    cmds:
-      - cargo release patch --execute --no-confirm --package coco
-
-  release:minor:
-    desc: 🚀 release coco
-    cmds:
-      - cargo release minor --execute --no-confirm --package coco
-
-  release:major:
-    desc: 🚀 release coco
-    cmds:
-      - cargo release major --execute --no-confirm --package coco
-
   i18n:
     desc: 🌍 search untranslated strings
     cmds:
       - cargo i18n
+
+  release:patch:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release patch --config .github/cfg/release.toml --execute --no-confirm --package rs-coco
+
+  release:minor:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release minor --config .github/cfg/release.toml --execute --no-confirm --package rs-coco
+
+  release:major:
+    desc: 🚀 release coco
+    cmds:
+      - cargo release major --config .github/cfg/release.toml --execute --no-confirm --package rs-coco
+
