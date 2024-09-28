@@ -66,3 +66,23 @@ tasks:
     cmds:
       - cargo release major --config .github/cfg/release.toml --execute --no-confirm --package rs-coco
 
+  changelog:unreleased:
+    desc: 📝 generate changelog
+    cmds:
+      - git cliff -c .github/cfg/cliff.toml -o "CHANGELOG.md"
+  
+  changelog:version:
+    desc: 📝 generate changelog
+    vars:
+      version: '{{.version | default ""}}'
+    cmds:
+      - '{{if eq .version ""}}false{{else}}git cliff -c .github/cfg/cliff.toml --tag "v{{.version}}" -o "CHANGELOG.md"{{end}}'
+
+  changelog:
+    desc: 📝 generate changelog
+    vars:
+      version: '{{.version | default ""}}'
+      add: '{{if eq .add "true"}}true{{else}}false{{end}}'
+    cmds:
+      - '{{if eq .version ""}}false{{else}}task changelog:version version="v{{.version}}"{{end}}'
+      - '{{if eq .add "true"}}git add CHANGELOG.md{{end}}'

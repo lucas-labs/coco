@@ -7,12 +7,8 @@ tag-prefix = ""
 consolidate-commits = false
 tag-name = "v{{version}}"
 pre-release-hook = [
-    "git",
-    "cliff",
-    "-c",
-    ".github/cfg/cliff.toml",
-    "--tag",
-    "v{{version}}",
-    "-o",
-    "CHANGELOG.md"
+    "task",
+    "changelog",
+    "version=v{{version}}",
+    "add=true"
 ]
