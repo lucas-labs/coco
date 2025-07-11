@@ -44,20 +44,20 @@ name = "coco"
 path = "src/lib/lib.rs"
 
 [dependencies]
-strum = { version = "0.26.1", features = ["derive"] }
-serde = { version = "1.0.210", features = ["derive"] }
-unicode-width = "0.2.0"
-serde_yaml = "0.9.34"
-tokio-util = "0.7.12"
-sys-locale = "0.3.1"
+strum = { version = "0.27.1", features = ["derive"] }
+serde = { version = "1.0.219", features = ["derive"] }
+unicode-width = "0.2.1"
+serde_yml = "0.0.12"
+tokio-util = "0.7.15"
+sys-locale = "0.3.2"
 pico-args = "0.5.0"
-rust-i18n = "3.1.2"
+rust-i18n = "3.1.5"
 matetui = "0.3.4"
-indoc = "2.0.5"
-dirs = "5.0.1"
+indoc = "2.0.6"
+dirs = "6.0.0"
 
 [dependencies.tokio]
-version = "1.40.0"
+version = "1.46.1"
 features = [
     "tokio-macros",
     "macros",

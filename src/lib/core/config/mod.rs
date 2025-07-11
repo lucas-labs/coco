@@ -6,7 +6,7 @@ use {
     rust_i18n::t,
     search::fetch_config_paths,
     serde::{Deserialize, Deserializer},
-    serde_yaml::from_reader,
+    serde_yml::from_reader,
     std::{collections::HashMap, fs::File, path::PathBuf},
 };
 
